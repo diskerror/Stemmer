@@ -50,11 +50,12 @@ main.o: main.cp ../Stemmer.h ../MultiTokenizer.h
 
 install:		
 	${CP} ${EXTENSION} ${EXTENSION_DIR}
-	${CP} ${INI} ${INI_DIR}
-	chmod 775 ${EXTENSION_DIR}/${EXTENSION}
+	chmod 755 ${EXTENSION_DIR}/${EXTENSION}
+	echo "extension = "${EXTENSION}"\n" > ${INI_DIR}${INI}
+	chmod 644 ${INI_DIR}${INI}
 				
 clean:
-	${RM} ${EXTENSION} ${OBJECTS}
+	${RM} ${EXTENSION} ${OBJECTS} precompile.o
 
 cleanpre:
 	$(RM) precompile.o

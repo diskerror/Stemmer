@@ -34,7 +34,7 @@ main.o: main.cp ../Stemmer.h
 
 
 clean:
-	$(RM) $(OBJECTS) stem
+	$(RM) $(OBJECTS) precompile.o stem
 
 cleanpre:
 	$(RM) precompile.o

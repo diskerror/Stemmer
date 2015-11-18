@@ -7,7 +7,6 @@
 #include "MultiTokenizer.h"
 
 using namespace std;
-using namespace boost;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 MultiTokenizer::MultiTokenizer()
@@ -47,7 +46,6 @@ void MultiTokenizer::SetDelimiter(string& delims)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//	Changes string that is referenced
 void MultiTokenizer::SetText(string& in)
 {
 	this->tokens = new stringstream( regex_replace(in, *this->delimRegex, "\x0A") );

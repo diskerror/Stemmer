@@ -10,6 +10,4 @@
 #include <regex>
 #include <sstream>
 
-#include <boost/tokenizer.hpp>
-
 // #endif	//	DISKERROR_PRECOMPILE_H

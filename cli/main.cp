@@ -48,11 +48,3 @@ int main(int argc, char** argv)
 	return SUCCESS;
 
 } // main
-
-/**
-is vowel
-http://www.perlmonks.org/?node_id=592883
-my @vowels = ( /[aeiuo]/gi );
-my @vowels = ( /[aeiou]|y(?![aeiou])/gi );
-my @vowels = ( /[aeiou]|(?<![aeiou])y(?![aeiou])/gi );
-*/
