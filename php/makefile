@@ -11,8 +11,7 @@ COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fpic
 LINKER_FLAGS	= -shared
 
 LDLIBS = \
-	-lphpcpp\
-	-lboost_system
+	-lphpcpp
 
 CPP	= ${COMPILER} ${COMPILER_FLAGS} -include "precompile.hpp" $<
 
@@ -20,12 +19,11 @@ RM		= rm -f
 CP		= cp -f
 MKDIR	= mkdir -p
 
-SOURCES = \
-	Stemmer.cp \
-	MultiTokenizer.cp \
-	main.cp
-
-OBJECTS = $(subst .cp,.o,$(subst .cpp,.o,$(SOURCES)))
+OBJECTS = \
+	MultiTokenizer.o \
+	StemmerConst.o \
+	Stemmer.o \
+	main.o
 
 
 all: ${EXTENSION}
@@ -39,10 +37,13 @@ ${EXTENSION}: ${OBJECTS} precompile.o
 precompile.o: precompile.hpp
 	${COMPILER} ${COMPILER_FLAGS} -I/usr/include $< -o $@
 
-Stemmer.o: ../Stemmer.cp ../Stemmer.h
+MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
 	$(CPP)
 
-MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
+StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
+	$(CPP)
+
+Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
 main.o: main.cp ../Stemmer.h ../MultiTokenizer.h

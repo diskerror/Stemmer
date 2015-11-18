@@ -13,7 +13,6 @@ enum {
 
 Php::Value stem(Php::Parameters &params)
 {
-    static Stemmer stem;
     static MultiTokenizer tokenizer;
     
     string p = params[0];
@@ -32,7 +31,7 @@ Php::Value stem(Php::Parameters &params)
     switch ( prefs ) {
     	case 0:
 		while( (token = tokenizer.Get()) != "" ) {
-			outputText += stem.StemWord(token) + " ";
+			outputText += Stemmer::StemWord(token) + " ";
 		}
 		
 		if ( outputText.size() ) {
@@ -45,7 +44,7 @@ Php::Value stem(Php::Parameters &params)
     	
     	case DISKERROR_STEM_RETURN_ARRAY:
 		while( (token = tokenizer.Get()) != "" ) {
-			outputArray[i++] = stem.StemWord(token);
+			outputArray[i++] = Stemmer::StemWord(token);
 		}
 		outputData = outputArray;
     	break;
@@ -53,7 +52,7 @@ Php::Value stem(Php::Parameters &params)
     	
     	case DISKERROR_STEM_RETURN_BIGRAM:
 		while( (token = tokenizer.Get()) != "" ) {
-			thisOne = stem.StemWord(token);
+			thisOne = Stemmer::StemWord(token);
 			outputText += (lastOne + thisOne + " ");
 			lastOne = thisOne;
 		}
@@ -64,7 +63,7 @@ Php::Value stem(Php::Parameters &params)
     	
     	case DISKERROR_STEM_RETURN_ARRAY|DISKERROR_STEM_RETURN_BIGRAM:
 		while( (token = tokenizer.Get()) != "" ) {
-			thisOne = stem.StemWord(token);
+			thisOne = Stemmer::StemWord(token);
 			outputArray[i++] = (lastOne + thisOne);
 			lastOne = thisOne;
 		}

@@ -1,5 +1,6 @@
 
 #include <fstream>
+#include "../MultiTokenizer.h"
 #include "../Stemmer.h"
 
 namespace
@@ -30,10 +31,15 @@ int main(int argc, char** argv)
 // 			ostream out &= cout;
 // 		}
 
-		string line;
-		Stemmer Stem;
-		while ( in >> line ) {
-			cout << line << "\t\t" << Stem.StemWord(line) << endl;
+		std::string text((std::istreambuf_iterator<char>(in)),
+                		 std::istreambuf_iterator<char>());
+        
+        MultiTokenizer tokenizer;
+        tokenizer.SetText(text);
+		string token;
+
+		while ( (token = tokenizer.Get()) != "" ) {
+			cout << token << "\t\t" << Stemmer::StemWord(token) << endl;
 		}
 	}
 	catch (regex_error& e) {

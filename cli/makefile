@@ -4,15 +4,14 @@ CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/opt/local/include -I/usr/incl
 CPP	= $(CXX) -include "precompile.hpp" $<
 RM	= rm -f
 
-LDLIBS= \
-#	-L/opt/local/lib \
-	-lboost_system-mt
+LDLIBS = \
+#	-L/opt/local/lib
 
-SOURCES= \
-	Stemmer.cp \
-	main.cp
-
-OBJECTS=$(subst .cp,.o,$(subst .cpp,.o,$(SOURCES)))
+OBJECTS = \
+	MultiTokenizer.o \
+	StemmerConst.o \
+	Stemmer.o \
+	main.o
 
 
 all: stem
@@ -26,10 +25,16 @@ stem: $(OBJECTS) precompile.o
 precompile.o: precompile.hpp
 	$(CXX) -x c++-header $< -o $@
 
+MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
+	$(CPP)
+
+StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
+	$(CPP)
+
 Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
-main.o: main.cp ../Stemmer.h
+main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
 	$(CPP)
 
 

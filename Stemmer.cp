@@ -5,10 +5,8 @@
 */
 
 #include "Stemmer.h"
-#include <boost/tokenizer.hpp>
 
 using namespace std;
-using namespace boost;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void toLower(string& in)
@@ -16,84 +14,6 @@ void toLower(string& in)
 	for(auto &c : in) {
 		c = tolower(c);
 	}
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-Stemmer::Stemmer() :
-	rcOpt( regex_constants::ECMAScript /*| regex_constants::optimize*/ ),
-	
-	s_R1("^([^aeiouy]*[aeiouy]+[^aeiouy].*"),
-// 	s_R2("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*"),
-	//	re_sTrim removes all control characters and spaces from both ends of a word
-	//		and requires a word to have no imbedded control characters.
-	re_sTrim("^[\\x00- \\x7F]*([^\\x00-\\x1F\\x7F]+)[\\x00- \\x7F]*$", rcOpt),
-	re_apos("^['`]*(.+?)['`]*$", rcOpt),
-	re_aposS("['`]s$", rcOpt),
-
-	//	over-stem
-	re_generVC("^((?:gener|commun|arsen)[aeiouy]+[^aeiouy]).*$", rcOpt),
-
-	//	Prelude 2
-	re_Vy("([aeiou])y", rcOpt),
-
-	//	Step_1a
-	re_sses("^(.*)sses$", rcOpt),
-	re_ied_ies("^(..+)(?:ied|ies)$", rcOpt),
-	re_us_ss("^.+(?:us|ss)$", rcOpt),
-	re_xVxs("^(.*[aeiouy].+)s$", rcOpt),
-
-	//	step 1b
-	re_eed_eedly(s_R1 + "ee)(?:d|dly)$", rcOpt),
-	re_ed_ingly(s_R1 + ")(?:ed|edly|ing|ingly)$", rcOpt),
-	re_at_bl_iz("(?:at|bl|iz)$", rcOpt),
-	re_dbl_end("^(..+([bdfgmnprt]))\\2$", rcOpt),
-	re_VwxY("(^.*(?:[^aeiouywxY]+[aeiouy][^aeiouywxY]|^[^aeiouy]+[aeiouy][^aeiouy]))$", rcOpt),
-
-	//	step 1c
-	re_CyY("(.[^aeiou])[yY]$", rcOpt),
-
-	//	step 2
-	re_anci(s_R1 + "[ae]nc)i$", rcOpt),
-	re_logi("^([^aeiouy]*[aeiouy]+.*log)i$", rcOpt),
-	re_bli("^([^aeiouy]*[aeiouy]+.*bl)i$", rcOpt),
-	re_lessli("^([^aeiouy]*[aeiouy]+.*(?:less|ful|[^aeiouy]ous|[^aeiouy]ent|[^aeiouy]al|[cdeghkmnrt]))li$", rcOpt),
-	re_biliti(s_R1 + ")biliti$", rcOpt),
-	re_aliti(s_R1 + ")aliti$", rcOpt),
-	re_iviti(s_R1 + ")iviti$", rcOpt),
-	re_ational(s_R1 + ")ational$", rcOpt),
-	re_tional(s_R1 + ")tional$", rcOpt),
-	re_alism(s_R1 + ")alism$", rcOpt),
-	re_ization(s_R1 + ")ization$", rcOpt),
-	re_ation(s_R1 + ")ation$", rcOpt),
-	re_ator(s_R1 + "at)or$", rcOpt),
-	re_izer(s_R1 + "iz)er$", rcOpt),
-	re_fulness(s_R1 + "(?:ful|ous|ive))ness$", rcOpt),
-
-	//	step 3
-// 	re_ational("^([^aeiouy]*[aeiouy]+[^aeiouy].*)ational$", rcOpt),
-// 	re_tional("^([^aeiouy]*[aeiouy]+[^aeiouy].*)tional$", rcOpt),
-	re_alize("^([^aeiouy]*[aeiouy]+[^aeiouy].*al)ize$", rcOpt),
-	re_icate("^([^aeiouy]*[aeiouy]+[^aeiouy].*ic)(?:ate|iti|al)$", rcOpt),
-	re_ful_ness("^([^aeiouy]*[aeiouy]+[^aeiouy].*)(?:ful|ness)$", rcOpt),
-	re_ative("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*)ative$", rcOpt),
-
-	//	step 4
-	re_ement("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*)ement$", rcOpt),
-	re_ment("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*)ment$", rcOpt),
-	re_ent("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*)ent$", rcOpt),
-	re_al_er_ic("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*)(?:al|ance|ence|er|ic|able|abli|ible|ant|ism|ate|iti|ous|ive|ize)$", rcOpt),
-	re_sion_tion("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*(?:s|t))ion$", rcOpt),
-
-	//	step 5
-	re_R2e("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*)e$", rcOpt),
-	re_ll("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*l)l$", rcOpt)
-{
-// 	cout << "Initializing Stemmer." << endl;
-}
-
-Stemmer::~Stemmer()
-{
 }
 
 
