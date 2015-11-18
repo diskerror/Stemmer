@@ -1,7 +1,7 @@
 # Stemmer
 Realization of Porter 2 stemmer using primarily regular expressions. This implimentation is not a fully accurate version of the stemmer but is still quite useful in this form.
 
-It was written as a personal exercise in C++ programming and for building PHP extensions. There is also a simple command line version.
+It was written as a personal exercise in C++ programming and for building PHP extensions. There is also a simple command line version. The PHP extension requires the Copernica http://www.phpcpp.com API to be installed on the host system.
 
 Sample text files are from http://snowball.tartarus.org.
 
