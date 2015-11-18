@@ -1,9 +1,11 @@
 # Stemmer
-Realization of Porter Stemmer 2 using primarily regular expressions. This is a personal exercise in C++ programming and building PHP extensions. There is also a simple command line version.
+Realization of Porter 2 stemmer using primarily regular expressions. This implimentation is not a fully accurate version of the stemmer but is still quite useful in this form.
 
-Sample text files are from [a]http://snowball.tartarus.org[/a].
+It was written as a personal exercise in C++ programming and for building PHP extensions. There is also a simple command line version.
 
-Command line make file has been tested on Debian 8 and OSX 10.10.
+Sample text files are from http://snowball.tartarus.org.
+
+Command line makefile has been tested on Debian 8 and OSX 10.10.
 
 # MultiTokenizer
 This is used with the Stemmer PHP extension. It's a simple text tokenizer that allows for multiple characters to be used as a delimiter.
