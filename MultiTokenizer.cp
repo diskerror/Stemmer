@@ -42,6 +42,11 @@ MultiTokenizer::~MultiTokenizer()
 void MultiTokenizer::SetDelimiter(string& delims)
 {
 	this->delimRegex = new regex( delims, regex_constants::ECMAScript|regex_constants::optimize );
+	
+	if ( this->tokens != nullptr ) {
+		delete this->tokens;
+		this->tokens = nullptr;
+	}
 }
 
 
