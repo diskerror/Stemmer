@@ -1,7 +1,6 @@
 /*
+	http://snowball.tartarus.org
 	See also http://www.tartarus.org/~martin/PorterStemmer
-				http://snowball.tartarus.org
-
 */
 
 #include "Stemmer.h"
@@ -14,12 +13,16 @@ const regex_constants::syntax_option_type Stemmer::rc_opt =
 	regex_constants::syntax_option_type( regex_constants::ECMAScript /*| regex_constants::optimize*/ );
 	
 const string Stemmer::s_R1	= string("^([^aeiouy]*[aeiouy]+[^aeiouy].*");
+
 // const string Stemmer::s_R2	= string("^([^aeiouy]*[aeiouy]+[^aeiouy]+[aeiouy]+[^aeiouy].*");
 	//	re_sTrim removes all control characters and spaces from both ends of a word
 	//		and requires a word to have no imbedded control characters.
 const regex Stemmer::re_sTrim	= regex("^[\\x00- \\x7F]*([^\\x00-\\x1F\\x7F]+)[\\x00- \\x7F]*$", rc_opt);
-const regex Stemmer::re_apos	= regex("^['`]*(.+?)['`]*$", rc_opt);
-const regex Stemmer::re_aposS	= regex("['`]s$", rc_opt);
+
+//	Must have apostrophy on both sides.
+const regex Stemmer::re_apos	= regex("^(['`]?)(.+?)\\1$", rc_opt);
+const regex Stemmer::re_aposS	= regex("['`]s['`]?$", rc_opt);
+const regex Stemmer::re_Sapos	= regex("^([^'`]+[s'`])['`]+$", rc_opt);
 
 	//	over-stem
 const regex Stemmer::re_generVC	= regex("^((?:gener|commun|arsen)[aeiouy]+[^aeiouy]).*$", rc_opt);
@@ -42,7 +45,7 @@ const regex Stemmer::re_VwxY =
 	regex("(^.*(?:[^aeiouywxY]+[aeiouy][^aeiouywxY]|^[^aeiouy]+[aeiouy][^aeiouy]))$", rc_opt);
 
 	//	step 1c
-const regex Stemmer::re_CyY	= regex("(.[^aeiou])[yY]$", rc_opt);
+const regex Stemmer::re_CyY		= regex("(.[^aeiou])[yY]$", rc_opt);
 
 	//	step 2
 const regex Stemmer::re_anci	= regex(s_R1 + "[ae]nc)i$", rc_opt);

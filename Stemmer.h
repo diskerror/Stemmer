@@ -30,6 +30,7 @@ protected:
 	
 	//	step 0
 	static const std::regex re_aposS;
+	static const std::regex re_Sapos;
 	
 	//	over-stem
 	static const std::regex re_generVC;

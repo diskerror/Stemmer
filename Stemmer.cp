@@ -19,6 +19,7 @@ void toLower(string& in)
 
 /**
 is vowel
+Should vowels include an apostrophy? ie. "don't"?
 http://www.perlmonks.org/?node_id=592883
 my @vowels = ( /[aeiuo]/gi );
 my @vowels = ( /[aeiou]|y(?![aeiou])/gi );
@@ -34,10 +35,18 @@ string Stemmer::StemWord(string in)
 	toLower(in);
 
 	//	Prelude 1
-	in = regex_replace(in, re_apos, "$1");
+	in = regex_replace(in, re_apos, "$2");
+	//	Words two characters and shorter are not further altered.
+	if (in.size() <= 2) {
+		return in;
+	}
 	
 	//	Step 0
 	in = regex_replace(in, re_aposS, "");
+	//	Only remove trailing apostrophe when preceeded by an S.
+	//	This departs from the descriptive text AND ALSO
+	//	departs from the sample output, which doesn't match the description.
+	in = regex_replace(in, re_Sapos, "$1");
 
 	//	Words two characters and shorter are not further altered.
 	if (in.size() <= 2) {
