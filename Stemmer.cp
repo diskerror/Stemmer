@@ -20,6 +20,7 @@ void toLower(string& in)
 /**
 is vowel
 Should vowels include an apostrophy? ie. "don't"?
+Should vowels follow the perlmonks pattern?
 http://www.perlmonks.org/?node_id=592883
 my @vowels = ( /[aeiuo]/gi );
 my @vowels = ( /[aeiou]|y(?![aeiou])/gi );
@@ -30,23 +31,23 @@ my @vowels = ( /[aeiou]|(?<![aeiou])y(?![aeiou])/gi );
 string Stemmer::StemWord(string in)
 {
 	//	remove spaces at beginning and end of string
-	in = regex_replace(in, re_sTrim, "$1");
+	in = re_sTrim(in);
 
 	toLower(in);
 
 	//	Prelude 1
-	in = regex_replace(in, re_apos, "$2");
+	in = re_apos(in);
 	//	Words two characters and shorter are not further altered.
 	if (in.size() <= 2) {
 		return in;
 	}
 	
 	//	Step 0
-	in = regex_replace(in, re_aposS, "");
+	in = re_aposS(in);
 	//	Only remove trailing apostrophe when preceeded by an S.
 	//	This departs from the descriptive text AND ALSO
 	//	departs from the sample output, which doesn't match the description.
-	in = regex_replace(in, re_Sapos, "$1");
+	in = re_Sapos(in);
 
 	//	Words two characters and shorter are not further altered.
 	if (in.size() <= 2) {
@@ -55,18 +56,18 @@ string Stemmer::StemWord(string in)
 
 
 	//	Exception 1
-	if ( in == "skis" ) return (string) "ski";
-	if ( in == "skies" ) return (string) "sky";
-	if ( in == "dying" ) return (string) "die";
-	if ( in == "lying" ) return (string) "lie";
-	if ( in == "tying" ) return (string) "tie";
+	if ( in == "skis" )		return (string) "ski";
+	if ( in == "skies" )	return (string) "sky";
+	if ( in == "dying" )	return (string) "die";
+	if ( in == "lying" )	return (string) "lie";
+	if ( in == "tying" )	return (string) "tie";
 
-	if ( in == "idly" ) return (string) "idl";
-	if ( in == "gently" ) return (string) "gentl";
-	if ( in == "ugly" ) return (string) "ugli";
-	if ( in == "early" ) return (string) "earli";
-	if ( in == "only" ) return (string) "onli";
-	if ( in == "singly" ) return (string) "singl";
+	if ( in == "idly" )		return (string) "idl";
+	if ( in == "gently" )	return (string) "gentl";
+	if ( in == "ugly" )		return (string) "ugli";
+	if ( in == "early" )	return (string) "earli";
+	if ( in == "only" )		return (string) "onli";
+	if ( in == "singly" )	return (string) "singl";
 
 	if (
 		in == "sky" || in == "news" || in == "howe" ||
@@ -76,32 +77,34 @@ string Stemmer::StemWord(string in)
 	}
 	
 	
-	smatch match;
+	//	Place to put captured matches.
+	vector<string> matches;
+	
 
 	//	Over-stemmed words: match "gener" + one or more vowels + one consonant
-	if ( regex_search(in, match, re_generVC) ) {
-		return match[1];
+	if ( re_generVC(in, matches) ) {
+		return matches[1];
 	}
 	
 
 	//	Prelude 2
-	in = regex_replace(in, re_Vy, "$1Y");
+	in = re_Vy(in);
 
 
 	//	Step_1a
-	if ( regex_match(in, match, re_sses) ) {
-		in = match[1];
+	if ( re_sses(in, matches) ) {
+		in = matches[1];
 		in += "ss";
 	}
-	else if ( regex_match(in, match, re_ied_ies) ) {
-		in = match[1];
+	else if ( re_ied_ies(in, matches) ) {
+		in = matches[1];
 		in += "i";
 	}
-	else if ( regex_match(in, re_us_ss) ) {
+	else if ( re_us_ss(in) ) {
 		;	//	do nothing
 	}
-	else if ( regex_match(in, match, re_xVxs) ) {
-		in = match[1];
+	else if ( re_xVxs(in, matches) ) {
+		in = matches[1];
 	}
 
 
@@ -115,19 +118,19 @@ string Stemmer::StemWord(string in)
 	
 
 	//	Step 1b
-	if ( regex_match(in, match, re_eed_eedly) ) {
-		in = match[1];
+	if ( re_eed_eedly(in, matches) ) {
+		in = matches[1];
 	}
-	else if ( regex_match(in, match, re_ed_ingly) ) {
-		in = match[1];
+	else if ( re_ed_ingly(in, matches) ) {
+		in = matches[1];
 		
-		if ( regex_match(in, re_at_bl_iz) ) {
+		if ( re_at_bl_iz(in) ) {
 			in += "e";
 		}
-		else if ( regex_match(in, match, re_dbl_end) ) {
-			in = match[1];
+		else if ( re_dbl_end(in, matches) ) {
+			in = matches[1];
 		}
-		else if ( regex_match(in, re_VwxY) ) {
+		else if ( re_vwxY(in) ) {
 			in += "e";
 		}
 	}
@@ -149,7 +152,7 @@ string Stemmer::StemWord(string in)
 
 
 	//	Step 1c
-	in = regex_replace(in, re_CyY, "$1i");
+	in = re_CyY(in);
 
 
 	/**
@@ -194,75 +197,75 @@ string Stemmer::StemWord(string in)
 		case 'i':
 		switch ( in[in.size()-2] ) {
 			case 'c':
-			in = regex_replace(in, re_anci, "$1e");
+			in = re_anci(in);
 			break;
 
 			case 'g':
-			in = regex_replace(in, re_logi, "$1");
+			in = re_logi(in);
 			break;
 
 			case 'l':
-			if ( regex_match(in, match, re_bli) ) {
-				in = match[1];
+			if ( re_bli(in, matches) ) {
+				in = matches[1];
 				in += "e";
 			}
 			else {
-				in = regex_replace(in, re_lessli, "$1");
+				in = re_lessli(in);
 			}
 			break;
 
 			case 't':
-			if ( regex_match(in, match, re_biliti) ) {
-				in = match[1];
+			if ( re_biliti(in, matches) ) {
+				in = matches[1];
 				in += "ble";
 			}
-			else if ( regex_match(in, match, re_aliti) ) {
-				in = match[1];
+			else if ( re_aliti(in, matches) ) {
+				in = matches[1];
 				in += "al";
 			}
 			else {
-				in = regex_replace(in, re_iviti, "$1ive");
+				in = re_iviti(in);
 			}
 			break;
 		}
 		break;
 
 		case 'l':
-		if ( regex_match(in, match, re_ational) ) {
-			in = match[1];
+		if ( re_ational(in, matches) ) {
+			in = matches[1];
 			in += "ate";
 		}
 		else {
-			in = regex_replace(in, re_tional, "$1tion");
+			in = re_tional(in);
 		}
 		break;
 
 		case 'm':
-		in = regex_replace(in, re_alism, "$1al");
+		in = re_alism(in);
 		break;
 
 		case 'n':
-		if ( regex_match(in, match, re_ization) ) {
-			in = match[1];
+		if ( re_ization(in, matches) ) {
+			in = matches[1];
 			in += "ize";
 		}
 		else {
-			in = regex_replace(in, re_ation, "$1ate");
+			in = re_ation(in);
 		}
 		break;
 
 		case 'r':
-		if ( regex_match(in, match, re_ator) ) {
-			in = match[1];
+		if ( re_ator(in, matches) ) {
+			in = matches[1];
 			in += "e";
 		}
 		else {
-			in = regex_replace(in, re_izer, "$1e");
+			in = re_izer(in);
 		}
 		break;
 
 		case 's':
-		in = regex_replace(in, re_fulness, "$1");
+		in = re_fulness(in);
 		break;
 	}
 	
@@ -282,52 +285,52 @@ string Stemmer::StemWord(string in)
 	    ful:   delete
 	   ness:   delete
 	*/
-	if ( regex_match(in, match, re_ational) ) {
-		in = match[1];
+	if ( re_ational(in, matches) ) {
+		in = matches[1];
 		in += "ate";
 	}
-	else if ( regex_match(in, match, re_tional) ) {
-		in = match[1];
+	else if ( re_tionalm(in, matches) ) {
+		in = matches[1];
 		in += "tion";
 	}
-	else if ( regex_match(in, match, re_alize) ) {
-		in = match[1];
+	else if ( re_alize(in, matches) ) {
+		in = matches[1];
 	}
-	else if ( regex_match(in, match, re_icate) ) {
-		in = match[1];
+	else if ( re_icate(in, matches) ) {
+		in = matches[1];
 	}
-	else if ( regex_match(in, match, re_ful_ness) ) {
-		in = match[1];
+	else if ( re_ful_ness(in, matches) ) {
+		in = matches[1];
 	}
 	else {
-		in = regex_replace(in, re_ative, "$1");
+		in = re_ative(in);
 	}
 
 
 	//	Step 4
-	if ( regex_match(in, match, re_ement) ) {
-		in = match[1];
+	if ( re_ement(in, matches) ) {
+		in = matches[1];
 	}
-	else if ( regex_match(in, match, re_ment) ) {
-		in = match[1];
+	else if ( re_ment(in, matches) ) {
+		in = matches[1];
 	}
-	else if ( regex_match(in, match, re_ent) ) {
-		in = match[1];
+	else if ( re_ent(in, matches) ) {
+		in = matches[1];
 	}
-	else if ( regex_match(in, match, re_al_er_ic) ) {
-		in = match[1];
+	else if ( re_al_er_ic(in, matches) ) {
+		in = matches[1];
 	}
 	else {
-		in = regex_replace(in, re_sion_tion, "$1");
+		in = re_R2stion(in);
 	}
 	
 
 	//	Step 5 (partial)
-	if ( regex_match(in, match, re_R2e) ) {
-		in = match[1];
+	if ( re_R2e(in, matches) ) {
+		in = matches[1];
 	}
 	else {
-		in = regex_replace(in, re_ll, "$1l");
+		in = re_R2ll(in);
 	}
 	
 

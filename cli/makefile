@@ -1,14 +1,18 @@
 
 COMP = g++
-CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/opt/local/include -I/usr/include -O2
+CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/usr/local/include -O2
 CPP	= $(CXX) -include "precompile.hpp" $<
 RM	= rm -f
 
 LDLIBS = \
-#	-L/opt/local/lib
+	-L/usr/local/lib \
+	-lpcre2-8
 
 OBJECTS = \
 	MultiTokenizer.o \
+	Pcre2.o \
+	Substitute.o \
+	Match.o \
 	StemmerConst.o \
 	Stemmer.o \
 	main.o
@@ -25,6 +29,15 @@ stem: $(OBJECTS) precompile.o
 precompile.o: precompile.hpp
 	$(CXX) -x c++-header $< -o $@
 
+Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
+	$(CPP)
+
+Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h ../Pcre2/Pcre2.h
+	$(CPP)
+
+Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h ../Pcre2/Pcre2.h
+	$(CPP)
+
 MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
 	$(CPP)
 
@@ -34,12 +47,12 @@ StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
 Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
-main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
+main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Pcre2/Match.h ../Pcre2/Substitute.h
 	$(CPP)
 
 
 clean:
-	$(RM) $(OBJECTS) precompile.o stem
+	$(RM) $(OBJECTS) stem
 
 cleanpre:
 	$(RM) precompile.o

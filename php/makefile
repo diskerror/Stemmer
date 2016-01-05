@@ -7,11 +7,12 @@ INI 			= ${NAME}.ini
 
 COMPILER		= g++
 LINKER			= g++
-COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fpic
+COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fpic  -I/usr/local/include
 LINKER_FLAGS	= -shared
 
 LDLIBS = \
-	-lphpcpp
+	-lphpcpp \
+	-lpcre2-8
 
 CPP	= ${COMPILER} ${COMPILER_FLAGS} -include "precompile.hpp" $<
 
@@ -21,6 +22,9 @@ MKDIR	= mkdir -p
 
 OBJECTS = \
 	MultiTokenizer.o \
+	Pcre2.o \
+	Substitute.o \
+	Match.o \
 	StemmerConst.o \
 	Stemmer.o \
 	main.o
@@ -37,6 +41,15 @@ ${EXTENSION}: ${OBJECTS} precompile.o
 precompile.o: precompile.hpp
 	${COMPILER} ${COMPILER_FLAGS} -I/usr/include $< -o $@
 
+Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
+	$(CPP)
+
+Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h ../Pcre2/Pcre2.h
+	$(CPP)
+
+Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h ../Pcre2/Pcre2.h
+	$(CPP)
+
 MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
 	$(CPP)
 
@@ -46,7 +59,7 @@ StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
 Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
-main.o: main.cp ../Stemmer.h ../MultiTokenizer.h
+main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Pcre2/Match.h ../Pcre2/Substitute.h
 	$(CPP)
 
 install:		
@@ -56,7 +69,7 @@ install:
 	chmod 644 ${INI_DIR}${INI}
 				
 clean:
-	${RM} ${EXTENSION} ${OBJECTS} precompile.o
+	${RM} ${EXTENSION} ${OBJECTS}
 
 cleanpre:
 	$(RM) precompile.o

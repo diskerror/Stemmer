@@ -21,4 +21,7 @@
 #include <ctype.h>
 #include <glob.h>
 
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
+
 // #endif	//	DISKERROR_PRECOMPILE_H

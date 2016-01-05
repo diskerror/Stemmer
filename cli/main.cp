@@ -1,5 +1,7 @@
 
 #include <fstream>
+#include "../Pcre2/Substitute.h"
+#include "../Pcre2/Match.h"
 #include "../MultiTokenizer.h"
 #include "../Stemmer.h"
 
@@ -42,10 +44,10 @@ int main(int argc, char** argv)
 			cout << token << "\t\t" << Stemmer::StemWord(token) << endl;
 		}
 	}
-	catch (regex_error& e) {
-		cerr << e.code() << " " << e.what() << endl;
-		return ERROR_UNHANDLED_EXCEPTION;
-	}
+// 	catch (regex_error& e) {
+// 		cerr << e.code() << " " << e.what() << endl;
+// 		return ERROR_UNHANDLED_EXCEPTION;
+// 	}
 	catch (exception& e) {
 		cerr << e.what() << endl;
 		return ERROR_UNHANDLED_EXCEPTION;
