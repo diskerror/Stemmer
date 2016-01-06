@@ -1,7 +1,5 @@
 
 #include <fstream>
-#include "../Pcre2/Substitute.h"
-#include "../Pcre2/Match.h"
 #include "../MultiTokenizer.h"
 #include "../Stemmer.h"
 
@@ -41,13 +39,9 @@ int main(int argc, char** argv)
 		string token;
 
 		while ( (token = tokenizer.Get()) != "" ) {
-			cout << token << "\t\t" << Stemmer::StemWord(token) << endl;
+			cout << setw(30) << left << token << Stemmer::StemWord(token) << endl;
 		}
 	}
-// 	catch (regex_error& e) {
-// 		cerr << e.code() << " " << e.what() << endl;
-// 		return ERROR_UNHANDLED_EXCEPTION;
-// 	}
 	catch (exception& e) {
 		cerr << e.what() << endl;
 		return ERROR_UNHANDLED_EXCEPTION;

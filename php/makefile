@@ -41,6 +41,7 @@ ${EXTENSION}: ${OBJECTS} precompile.o
 precompile.o: precompile.hpp
 	${COMPILER} ${COMPILER_FLAGS} -I/usr/include $< -o $@
 
+
 Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
 	$(CPP)
 
@@ -59,14 +60,21 @@ StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
 Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
-main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Pcre2/Match.h ../Pcre2/Substitute.h
+main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
 	$(CPP)
+
 
 install:		
 	${CP} ${EXTENSION} ${EXTENSION_DIR}
 	chmod 755 ${EXTENSION_DIR}/${EXTENSION}
 	echo "extension = "${EXTENSION}"\n" > ${INI_DIR}${INI}
 	chmod 644 ${INI_DIR}${INI}
+	ln -sf ${INI_DIR}${INI} /etc/php5/apache2/conf.d/
+	ln -sf ${INI_DIR}${INI} /etc/php5/cli/conf.d/
+
+uninstall:
+	$(RM) ${EXTENSION_DIR}/${EXTENSION} ${INI_DIR}${INI} /etc/php5/apache2/conf.d/${INI} /etc/php5/cli/conf.d/${INI}
+
 				
 clean:
 	${RM} ${EXTENSION} ${OBJECTS}

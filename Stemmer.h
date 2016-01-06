@@ -20,13 +20,15 @@ class Stemmer
 {
 protected:
 
+	static const std::string s_R1cap;
 	static const std::string s_R1;
+	static const std::string s_R2cap;
 	static const std::string s_R2;
 
 	static const Pcre2::Substitute	re_sTrim;
 
 	//	prelude 1
-	static const Pcre2::Substitute	re_apos;
+	static const Pcre2::Match		re_apos;
 	
 	//	step 0
 	static const Pcre2::Substitute	re_aposS;
@@ -51,44 +53,46 @@ protected:
 	static const Pcre2::Match		re_dbl_end;
 	static const Pcre2::Match		re_vwxY;
 
+	static const Pcre2::Match		re_cvc;
+
 	//	step 1c
-	static const Pcre2::Substitute	re_CyY;
+	static const Pcre2::Match		re_CyY;
 
 	//	step 2
-	static const Pcre2::Substitute	re_anci;
-	static const Pcre2::Substitute	re_logi;
+	static const Pcre2::Match		re_anci;
+	static const Pcre2::Match		re_logi;
 	static const Pcre2::Match		re_bli;
-	static const Pcre2::Substitute	re_lessli;
+	static const Pcre2::Match		re_lessli;
 	static const Pcre2::Match		re_biliti;
 	static const Pcre2::Match		re_aliti;
-	static const Pcre2::Substitute	re_iviti;
+	static const Pcre2::Match		re_iviti;
 	static const Pcre2::Match		re_ational;
-	static const Pcre2::Substitute	re_tional;
-	static const Pcre2::Substitute	re_alism;
+	static const Pcre2::Match		re_tional;
+	static const Pcre2::Match		re_alism;
 	static const Pcre2::Match		re_ization;
-	static const Pcre2::Substitute	re_ation;
+	static const Pcre2::Match		re_ation;
 	static const Pcre2::Match		re_ator;
-	static const Pcre2::Substitute	re_izer;
-	static const Pcre2::Substitute	re_fulness;
+	static const Pcre2::Match		re_izer;
+	static const Pcre2::Match		re_fulness;
 
 	//	step 3
 // 	static const Pcre2::Match		re_ational;	same as step 2
-	static const Pcre2::Match		re_tionalm;
+// 	static const Pcre2::Match		re_tional;
 	static const Pcre2::Match		re_alize;
 	static const Pcre2::Match		re_icate;
 	static const Pcre2::Match		re_ful_ness;
-	static const Pcre2::Substitute	re_ative;
+	static const Pcre2::Match		re_ative;
 
 	//	step 4
 	static const Pcre2::Match		re_ement;
 	static const Pcre2::Match		re_ment;
 	static const Pcre2::Match		re_ent;
 	static const Pcre2::Match		re_al_er_ic;
-	static const Pcre2::Substitute	re_R2stion;
+	static const Pcre2::Match		re_R2stion;
 	
 	//	step 5
 	static const Pcre2::Match		re_R2e;
-	static const Pcre2::Substitute	re_R2ll;
+	static const Pcre2::Match		re_R2ll;
 
 public:
 	

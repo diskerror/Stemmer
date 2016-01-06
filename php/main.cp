@@ -1,6 +1,4 @@
 
-#include "../Pcre2/Substitute.h"
-#include "../Pcre2/Match.h"
 #include "../MultiTokenizer.h"
 #include "../Stemmer.h"
 

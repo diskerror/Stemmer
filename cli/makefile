@@ -47,7 +47,7 @@ StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
 Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
-main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Pcre2/Match.h ../Pcre2/Substitute.h
+main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
 	$(CPP)
 
 

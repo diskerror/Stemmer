@@ -5,6 +5,7 @@
 */
 
 #include "Stemmer.h"
+#include <iostream>
 
 using namespace std;
 
@@ -34,9 +35,16 @@ string Stemmer::StemWord(string in)
 	in = re_sTrim(in);
 
 	toLower(in);
+// cout << setw(5) << left << __LINE__ << in << endl;
+
+	//	Place to put captured matches.
+	vector<string> matches;
+	
 
 	//	Prelude 1
-	in = re_apos(in);
+	if ( re_apos(in, matches) )
+		in = matches[2];
+	
 	//	Words two characters and shorter are not further altered.
 	if (in.size() <= 2) {
 		return in;
@@ -77,10 +85,6 @@ string Stemmer::StemWord(string in)
 	}
 	
 	
-	//	Place to put captured matches.
-	vector<string> matches;
-	
-
 	//	Over-stemmed words: match "gener" + one or more vowels + one consonant
 	if ( re_generVC(in, matches) ) {
 		return matches[1];
@@ -92,19 +96,17 @@ string Stemmer::StemWord(string in)
 
 
 	//	Step_1a
-	if ( re_sses(in, matches) ) {
-		in = matches[1];
-		in += "ss";
+	if ( re_sses(in) ) {
+		in.resize(in.size()-2);
 	}
-	else if ( re_ied_ies(in, matches) ) {
-		in = matches[1];
-		in += "i";
+	else if ( re_ied_ies(in) ) {
+		in.resize(in.size()-2);
 	}
 	else if ( re_us_ss(in) ) {
 		;	//	do nothing
 	}
-	else if ( re_xVxs(in, matches) ) {
-		in = matches[1];
+	else if ( re_xVxs(in) ) {
+		in.resize(in.size()-1);
 	}
 
 
@@ -116,25 +118,25 @@ string Stemmer::StemWord(string in)
 		return in;
 	}
 	
-
+// cout << setw(5) << left << __LINE__ << in << endl;
 	//	Step 1b
 	if ( re_eed_eedly(in, matches) ) {
 		in = matches[1];
 	}
 	else if ( re_ed_ingly(in, matches) ) {
 		in = matches[1];
-		
+// cout << setw(5) << left << __LINE__ << in << endl;
 		if ( re_at_bl_iz(in) ) {
 			in += "e";
 		}
-		else if ( re_dbl_end(in, matches) ) {
-			in = matches[1];
+		else if ( re_dbl_end(in) ) {
+			in.resize(in.size()-1);
 		}
 		else if ( re_vwxY(in) ) {
 			in += "e";
 		}
 	}
-	
+// cout << setw(5) << left << __LINE__ << in << endl;
 	//	My addition that solves some "e" endings.
 	if ( in.size() == 2 ) {
 		in += "e";
@@ -143,8 +145,11 @@ string Stemmer::StemWord(string in)
 	}
 	else {
 		switch( in.size() ) {
-			case 1:
 			case 3:
+			if ( re_cvc(in) ) {
+				in += "e";
+			}
+			case 1:
 			toLower(in);
 			return in;
 		}
@@ -152,9 +157,10 @@ string Stemmer::StemWord(string in)
 
 
 	//	Step 1c
-	in = re_CyY(in);
+	if ( re_CyY(in) )
+		in[in.size()-1] = 'i';
 
-
+// cout << setw(5) << left << __LINE__ << in << endl;
 	/**
 	Step 2 suffixes sorted alphabetically R to L, longest to shortest
 	Groupings help identify which items must be done in a particular order.
@@ -197,78 +203,86 @@ string Stemmer::StemWord(string in)
 		case 'i':
 		switch ( in[in.size()-2] ) {
 			case 'c':
-			in = re_anci(in);
+			if ( re_anci(in) ) {
+				in[in.size()-1] = 'e';
+			}
 			break;
 
 			case 'g':
-			in = re_logi(in);
+			if ( re_logi(in) ) {
+				in.resize(in.size()-1);
+			}
 			break;
 
 			case 'l':
-			if ( re_bli(in, matches) ) {
-				in = matches[1];
-				in += "e";
+			if ( re_bli(in) ) {
+				in[in.size()-1] = 'e';
 			}
-			else {
-				in = re_lessli(in);
+			else if (re_lessli(in)) {
+				in.resize(in.size()-2);
 			}
 			break;
 
 			case 't':
-			if ( re_biliti(in, matches) ) {
-				in = matches[1];
-				in += "ble";
+			if ( re_biliti(in) ) {
+				in.resize(in.size()-5);
+				in += "le";
 			}
-			else if ( re_aliti(in, matches) ) {
-				in = matches[1];
-				in += "al";
+			else if ( re_aliti(in) ) {
+				in.resize(in.size()-3);
 			}
-			else {
-				in = re_iviti(in);
+			else if (re_iviti(in)) {
+				in.resize(in.size()-2);
+				in[in.size()-1] = 'e';
 			}
 			break;
 		}
 		break;
 
 		case 'l':
-		if ( re_ational(in, matches) ) {
-			in = matches[1];
-			in += "ate";
+		if ( re_ational(in) ) {
+			in.resize(in.size()-4);
+			in[in.size()-1] = 'e';
 		}
-		else {
-			in = re_tional(in);
+		else if ( re_tional(in) ) {
+			in.resize(in.size()-2);
 		}
 		break;
 
 		case 'm':
-		in = re_alism(in);
+		if ( re_alism(in) ) {
+			in.resize(in.size()-3);
+		}
 		break;
 
 		case 'n':
-		if ( re_ization(in, matches) ) {
-			in = matches[1];
-			in += "ize";
+		if ( re_ization(in) ) {
+			in.resize(in.size()-4);
+			in[in.size()-1] = 'e';
 		}
-		else {
-			in = re_ation(in);
+		else if ( re_ation(in) ) {
+			in.resize(in.size()-2);
+			in[in.size()-1] = 'e';
 		}
 		break;
 
 		case 'r':
-		if ( re_ator(in, matches) ) {
-			in = matches[1];
-			in += "e";
+		if ( re_ator(in) ) {
+			in.resize(in.size()-1);
+			in[in.size()-1] = 'e';
 		}
-		else {
-			in = re_izer(in);
+		else if ( re_izer(in) ) {
+			in.resize(in.size()-1);
 		}
 		break;
 
 		case 's':
-		in = re_fulness(in);
+		if ( re_fulness(in) ) {
+			in.resize(in.size()-4);
+		}
 		break;
 	}
-	
+// cout << setw(5) << left << __LINE__ << in << endl;
 
 	/**
 	Step 3
@@ -285,16 +299,15 @@ string Stemmer::StemWord(string in)
 	    ful:   delete
 	   ness:   delete
 	*/
-	if ( re_ational(in, matches) ) {
-		in = matches[1];
-		in += "ate";
+	if ( re_ational(in) ) {
+		in.resize(in.size()-4);
+		in[in.size()-1] = 'e';
 	}
-	else if ( re_tionalm(in, matches) ) {
-		in = matches[1];
-		in += "tion";
+	else if ( re_tional(in) ) {
+		in.resize(in.size()-2);
 	}
-	else if ( re_alize(in, matches) ) {
-		in = matches[1];
+	else if ( re_alize(in) ) {
+		in.resize(in.size()-3);
 	}
 	else if ( re_icate(in, matches) ) {
 		in = matches[1];
@@ -302,35 +315,35 @@ string Stemmer::StemWord(string in)
 	else if ( re_ful_ness(in, matches) ) {
 		in = matches[1];
 	}
-	else {
-		in = re_ative(in);
+	else if ( re_ative(in) ){
+		in.resize(in.size()-5);
 	}
-
+// cout << setw(5) << left << __LINE__ << in << endl;
 
 	//	Step 4
-	if ( re_ement(in, matches) ) {
-		in = matches[1];
+	if ( re_ement(in) ) {
+		in.resize(in.size()-5);
 	}
 	else if ( re_ment(in, matches) ) {
-		in = matches[1];
+		in.resize(in.size()-4);
 	}
 	else if ( re_ent(in, matches) ) {
-		in = matches[1];
+		in.resize(in.size()-3);
 	}
 	else if ( re_al_er_ic(in, matches) ) {
 		in = matches[1];
 	}
-	else {
-		in = re_R2stion(in);
+	else if ( re_R2stion(in) ) {
+		in.resize(in.size()-3);
 	}
-	
+// cout << setw(5) << left << __LINE__ << in << endl;
 
 	//	Step 5 (partial)
-	if ( re_R2e(in, matches) ) {
-		in = matches[1];
+	if ( re_R2e(in) ) {
+		in.resize(in.size()-1);
 	}
-	else {
-		in = re_R2ll(in);
+	else if ( re_R2ll(in) ) {
+		in.resize(in.size()-1);
 	}
 	
 
