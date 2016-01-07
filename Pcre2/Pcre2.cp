@@ -32,7 +32,7 @@ void Pcre2::Pcre2::init(const char* expression, uint32_t syntaxOption)
 	if ( this->_regex == NULL )
 		throw Exception( errorcode );
 	
-// 	pcre2_jit_compile(this->_regex, PCRE2_JIT_COMPLETE);
+	pcre2_jit_compile(this->_regex, PCRE2_JIT_COMPLETE);
 
 	this->_match_data = pcre2_match_data_create_from_pattern(this->_regex, NULL);
 }
