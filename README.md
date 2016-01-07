@@ -5,7 +5,7 @@ It was written as a personal exercise in C++ programming and for building PHP ex
 
 Sample text files are from http://snowball.tartarus.org.
 
-[PCRE2](http://www.pcre.org) (v10.20) was used to replace the C++11 "regex" library for version 0.3 of the stemmer. PCRE2 processes the 42,600 word file "voc2.txt" in 1/3 the time as "regex". Compiling this code requires that PCRE2 library be installed on the local system.
+[PCRE2](http://www.pcre.org) (v10.20) was used to replace the C++11 "regex" library for version 0.3 of the stemmer. PCRE2 processes the 42,600 word file "voc2.txt" in 1/4 the time as "regex". Compiling this code requires that PCRE2 library be installed on the local system.
 
 Command line makefile has been tested on Debian 8.
 
