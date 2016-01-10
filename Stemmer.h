@@ -11,7 +11,6 @@ http://snowball.tartarus.org
 #define DISKERROR_STEMMER_H
 #pragma once
 
-// #include <regex>
 #include "Pcre2/Substitute.h"
 #include "Pcre2/Match.h"
 #include <string>

@@ -1,24 +1,24 @@
 
 NAME			= diskerror_stem
-INI_DIR			= /etc/php5/mods-available/
+
+PHPE			= /etc/php5
+INI_DIR			= $(PHPE)/mods-available/
 EXTENSION_DIR	= $(shell php-config --extension-dir)
-EXTENSION 		= ${NAME}.so
-INI 			= ${NAME}.ini
+EXTENSION 		= $(NAME).so
+INI 			= $(NAME).ini
 
 COMPILER		= g++
 LINKER			= g++
-COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fpic  -I/usr/local/include
+COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fpic -I/usr/local/include
 LINKER_FLAGS	= -shared
 
 LDLIBS = \
 	-lphpcpp \
+	-L/usr/local/lib \
+	-Wl,-rpath,/usr/local/lib \
 	-lpcre2-8
 
-CPP	= ${COMPILER} ${COMPILER_FLAGS} -include "precompile.hpp" $<
-
-RM		= rm -f
-CP		= cp -f
-MKDIR	= mkdir -p
+CPP	= $(COMPILER) $(COMPILER_FLAGS) -include "precompile.hpp" $<
 
 OBJECTS = \
 	MultiTokenizer.o \
@@ -30,25 +30,25 @@ OBJECTS = \
 	main.o
 
 
-all: ${EXTENSION}
+all: $(EXTENSION)
 
 pre: cleanpre \
 	precompile.o
 
-${EXTENSION}: ${OBJECTS} precompile.o
-	${LINKER} ${LDLIBS} ${OBJECTS} ${LINKER_FLAGS} -o $@
+$(EXTENSION): $(OBJECTS) precompile.o
+	$(LINKER) $(OBJECTS) $(LINKER_FLAGS) $(LDLIBS) -o $@
 
 precompile.o: precompile.hpp
-	${COMPILER} ${COMPILER_FLAGS} -I/usr/include $< -o $@
+	$(COMPILER) $(COMPILER_FLAGS) $< -o $@
 
 
 Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
 	$(CPP)
 
-Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h ../Pcre2/Pcre2.h
+Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h
 	$(CPP)
 
-Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h ../Pcre2/Pcre2.h
+Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h
 	$(CPP)
 
 MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
@@ -64,20 +64,31 @@ main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
 	$(CPP)
 
 
-install:		
-	${CP} ${EXTENSION} ${EXTENSION_DIR}
-	chmod 755 ${EXTENSION_DIR}/${EXTENSION}
-	echo "extension = "${EXTENSION}"\n" > ${INI_DIR}${INI}
-	chmod 644 ${INI_DIR}${INI}
-	ln -sf ${INI_DIR}${INI} /etc/php5/apache2/conf.d/
-	ln -sf ${INI_DIR}${INI} /etc/php5/cli/conf.d/
+install:
+	cp -f $(EXTENSION) $(EXTENSION_DIR)
+	chmod 644 $(EXTENSION_DIR)/$(EXTENSION)
+	echo "extension = "$(EXTENSION)"\n" > $(INI_DIR)$(INI)
+	chmod 644 $(INI_DIR)$(INI)
+	if [ -d $(PHPE)/apache2/conf.d/ ]; then \
+		ln -sf $(INI_DIR)$(INI) $(PHPE)/apache2/conf.d/;\
+	fi
+	if [ -d $(PHPE)/cli/conf.d/ ]; then \
+		ln -sf $(INI_DIR)$(INI) $(PHPE)/cli/conf.d/;\
+	fi
+	if [ -d $(PHPE)/cgi/conf.d/ ]; then \
+		ln -sf $(INI_DIR)$(INI) $(PHPE)/cgi/conf.d/;\
+	fi
 
 uninstall:
-	$(RM) ${EXTENSION_DIR}/${EXTENSION} ${INI_DIR}${INI} /etc/php5/apache2/conf.d/${INI} /etc/php5/cli/conf.d/${INI}
+	rm -f $(EXTENSION_DIR)/$(EXTENSION) \
+		$(INI_DIR)$(INI) \
+		$(PHPE)/apache2/conf.d/$(INI) \
+		$(PHPE)/cli/conf.d/$(INI) \
+		$(PHPE)/cgi/conf.d/$(INI)
 
 				
 clean:
-	${RM} ${EXTENSION} ${OBJECTS}
+	rm -f $(EXTENSION) $(OBJECTS)
 
 cleanpre:
-	$(RM) precompile.o
+	rm -f precompile.o

@@ -6,6 +6,7 @@ RM	= rm -f
 
 LDLIBS = \
 	-L/usr/local/lib \
+	-Wl,-rpath,/usr/local/lib \
 	-lpcre2-8
 
 OBJECTS = \
@@ -32,10 +33,10 @@ precompile.o: precompile.hpp
 Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
 	$(CPP)
 
-Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h ../Pcre2/Pcre2.h
+Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h
 	$(CPP)
 
-Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h ../Pcre2/Pcre2.h
+Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h
 	$(CPP)
 
 MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
