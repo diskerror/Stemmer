@@ -1,5 +1,6 @@
 # Stemmer
-Realization of Porter 2 stemmer primarily using regular expressions. This implimentation is not a fully accurate version of the stemmer as it contains some alternate and additional rules. It was written as a personal exercise in C++ programming and for building PHP extensions. There is also a simple command line version.
+Warning: The are serious errors in the implementation of this algorithm.
+Realization of Porter 2 stemmer primarily using regular expressions. It was written as a personal exercise in C++ programming and for building PHP extensions. There is also a simple command line version.
 
 Sample text files are at http://snowball.tartarus.org.
 
