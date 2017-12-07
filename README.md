@@ -21,7 +21,7 @@ CentOS 6 requires at least devtoolset-2 to compile PHP-CPP.
  > scl enable devtoolset-2 bash
 ```
 
-##PCRE2
+## PCRE2
 The PCRE2 library must be installed and the source can be found [here](http://www.pcre.org).
 ```
  > ./configure --enable-jit --enable-newline-is-anycrlf
@@ -29,7 +29,7 @@ The PCRE2 library must be installed and the source can be found [here](http://ww
  > sudo make install
 ```
 
-##PHP-CPP
+## PHP-CPP
 The [Copernica](http://www.copernica.com) PHP-CPP library is used to build the PHP extension.
 ```
  > make release
