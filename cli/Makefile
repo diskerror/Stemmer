@@ -10,13 +10,13 @@ LDLIBS = \
 	-lpcre2-8
 
 OBJECTS = \
-	MultiTokenizer.o \
-	Pcre2.o \
-	Substitute.o \
-	Match.o \
-	StemmerConst.o \
-	Stemmer.o \
-	main.o
+	obj/MultiTokenizer.o \
+	obj/Pcre2.o \
+	obj/Substitute.o \
+	obj/Match.o \
+	obj/StemmerConst.o \
+	obj/Stemmer.o \
+	obj/main.o
 
 
 all: stem
@@ -27,28 +27,28 @@ pre: cleanpre \
 stem: $(OBJECTS) precompile.o
 	$(COMP) $(LDLIBS) $(OBJECTS) -o $@
 
-precompile.o: precompile.hpp
+obj/precompile.o: precompile.hpp
 	$(CXX) -x c++-header $< -o $@
 
-Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
+obj/Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
 	$(CPP)
 
-Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h
+obj/Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h
 	$(CPP)
 
-Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h
+obj/Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h
 	$(CPP)
 
-MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
+obj/MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
 	$(CPP)
 
-StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
+obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
 	$(CPP)
 
-Stemmer.o: ../Stemmer.cp ../Stemmer.h
+obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h
 	$(CPP)
 
-main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
+obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
 	$(CPP)
 
 
