@@ -90,7 +90,7 @@ extern "C" {
     {
         // static(!) Php::Extension object that should stay in memory
         // for the entire duration of the process (that's why it's static)
-        static Php::Extension extension("diskerror_stem", "0.3");
+        static Php::Extension extension("diskerror_stem", "0.4");
         
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_ARRAY", DISKERROR_STEM_RETURN_ARRAY));
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_BIGRAM", DISKERROR_STEM_RETURN_BIGRAM));
