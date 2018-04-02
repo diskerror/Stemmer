@@ -7,7 +7,7 @@ INI 			= $(NAME).ini
 
 COMPILER		= g++
 LINKER			= g++
-COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fPIC -I/usr/local/include
+COMPILER_FLAGS	= -Wall -c -O2 -std=c++14 -fPIC -I/usr/local/include
 LINKER_FLAGS	= -shared
 
 LDLIBS = \
@@ -64,7 +64,7 @@ obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
 
 
 # Installation and cleanup. (tested on Debian 8 and CentOS 6)
-install: $(EXTENSION)
+install5: $(EXTENSION)
 	cp -f $(EXTENSION) $(EXTENSION_DIR)
 	chmod 644 $(EXTENSION_DIR)/$(EXTENSION)
 	if [ -d /etc/php5/mods-available/ ]; then \

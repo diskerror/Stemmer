@@ -4,36 +4,16 @@
 using namespace Pcre2;
 using namespace std;
 
-Match::Match(const char* expression, const uint32_t syntaxOption)
-	: Pcre2(expression, syntaxOption)
+Match::Match(const char* expression)
+	: Pcre2(expression)
 {
 }
 
-Match::Match(const string& expression, const uint32_t syntaxOption)
-	: Pcre2(expression.c_str(), syntaxOption)
+Match::Match(const string& expression)
+	: Pcre2(expression.c_str())
 {
 }
 
-int32_t Match::doMatch(const char* subject, const uint32_t offset) const
-{
-	int32_t matchCount = pcre2_match(
-		this->_regex,
-		(const PCRE2_UCHAR*) subject,
-		PCRE2_ZERO_TERMINATED,
-		offset,
-		0,	//	options
-		this->_match_data,
-		NULL
-	);
-	
-	if ( matchCount < PCRE2_ERROR_NOMATCH )
-		throw new Exception( matchCount );
-	
-	return matchCount;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  *  This only returns boolean of match.
  *
@@ -41,11 +21,22 @@ int32_t Match::doMatch(const char* subject, const uint32_t offset) const
  */
 bool Match::operator()(const string& subject, const uint32_t offset) const
 {
-	int32_t matchCount = this->doMatch((const char*)subject.c_str(), offset);
-	
+	int32_t matchCount = pcre2_match(
+		this->_regex,
+		(const PCRE2_UCHAR*) subject.c_str(),
+		PCRE2_ZERO_TERMINATED,
+		offset,
+		PCRE2_NO_UTF_CHECK,
+		this->_match_data,
+		NULL
+	);
+
+	if ( matchCount < PCRE2_ERROR_NOMATCH )
+		throw new Exception( matchCount );
+
 	if ( matchCount == PCRE2_ERROR_NOMATCH )
 		return false;
-	
+
 	return true;
 }
 
@@ -61,19 +52,30 @@ bool Match::operator()(const string& subject, const uint32_t offset) const
 bool Match::operator()(const string& subject, vector<string>& matches, const uint32_t offset) const
 {
 	const char *subjectC(subject.c_str());
-	
-	int32_t matchCount = this->doMatch(subjectC, offset);
-	
+
+	int32_t matchCount = pcre2_match(
+		this->_regex,
+		(const PCRE2_UCHAR*) subjectC,
+		PCRE2_ZERO_TERMINATED,
+		offset,
+		PCRE2_NO_UTF_CHECK,
+		this->_match_data,
+		NULL
+	);
+
+	if ( matchCount < PCRE2_ERROR_NOMATCH )
+		throw new Exception( matchCount );
+
 	matches.clear();
 	if ( matchCount == PCRE2_ERROR_NOMATCH )
 		return false;
-	
+
 	//	Now it must be good. Get the first set of captures.
 	PCRE2_SIZE* ovector = pcre2_get_ovector_pointer(this->_match_data);
 	PCRE2_SIZE i;
 	for (i = 0; i < (PCRE2_SIZE) matchCount; i++) {
 		matches.emplace_back( (subjectC + ovector[2*i]), (ovector[2*i+1] - ovector[2*i]) );
 	}
-	
+
 	return true;
 }

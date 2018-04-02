@@ -143,17 +143,17 @@ string Stemmer::StemWord(string in)
 		toLower(in);
 		return in;
 	}
-	else {
-		switch( in.size() ) {
-			case 3:
-			if ( re_cvc(in) ) {
-				in += "e";
-			}
-			case 1:
-			toLower(in);
-			return in;
-		}
-	}
+//	else {
+//		switch( in.size() ) {
+//			case 3:
+//			if ( re_cvc(in) ) {
+//				in += "e";
+//			}
+//			case 1:
+//			toLower(in);
+//			return in;
+//		}
+//	}
 
 
 	//	Step 1c

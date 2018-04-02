@@ -95,11 +95,12 @@ extern "C" {
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_ARRAY", DISKERROR_STEM_RETURN_ARRAY));
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_BIGRAM", DISKERROR_STEM_RETURN_BIGRAM));
         
-        extension.add( "Diskerror\\Stem", stem, {
-        	Php::ByVal("subject", Php::Type::String),
-        	Php::ByVal("options", Php::Type::Numeric, false)
-        } );
-        
+//        extension.add( "Diskerror\\Stem", stem, {
+//        	Php::ByVal("subject", Php::Type::String),
+//        	Php::ByVal("options", Php::Type::Numeric, false)
+//        } );
+		extension.add<stem>( "Diskerror\\Stem" );
+
         // return the extension
         return extension;
     }

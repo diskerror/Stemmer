@@ -1,9 +1,9 @@
 # Stemmer
-Realization of Porter 2 stemmer primarily using regular expressions. This implimentation is not a fully accurate version of the stemmer as it contains some alternate and additional rules. It was written as a personal exercise in C++ programming and for building PHP extensions. There is also a simple command line version.
+A stemmer based on the Porter 2 stemmer primarily using regular expressions. It was written as a personal exercise in C++ programming, PCRE2 regular expressions, and for building PHP extensions. There is also a simple command line version.
 
 Sample text files are at http://snowball.tartarus.org.
 
-The makefiles have been tested on Debian 8 with PHP 5.6 and CentOS 6 with PHP 5.5
+The makefiles have been tested on Debian 8 with PHP 5.6 and CentOS 6 with PHP 5.5. It is currently being tested on PHP 7.2.
 
 ## MultiTokenizer
 This is used with the Stemmer PHP extension. It's a simple text tokenizer that allows for multiple characters to be used as a delimiter.
@@ -19,16 +19,16 @@ CentOS 6 requires at least devtoolset-2 to compile PHP-CPP.
  > scl enable devtoolset-2 bash
 ```
 
-##PCRE2
-The PCRE2 library must be installed and the source can be found [here](http://www.pcre.org).
+## PCRE2
+The [PCRE2](http://www.pcre.org) library must be downloaded and installed.
 ```
  > ./configure --enable-jit --enable-newline-is-anycrlf
  > make
  > sudo make install
 ```
 
-##PHP-CPP
-The [Copernica](http://www.copernica.com) PHP-CPP library is used to build the PHP extension.
+## PHP-CPP
+The [Copernica](http://www.copernica.com) [PHP-CPP](http://www.php-cpp.com/) library is used to build the PHP extension.
 ```
  > make release
  > sudo make install

@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 // 		ifstream in2(argv[2]);
 
 		if ( !in )  {
-			throw new invalid_argument("file name required or bad file");
+			throw invalid_argument("file name required or bad file");
 		}
 
 // 		if ( argc > 2 ) {

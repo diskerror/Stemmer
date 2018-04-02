@@ -8,7 +8,7 @@ See also http://www.tartarus.org/~martin/PorterStemmer
 using namespace std;
 using namespace Pcre2;
 
-//	shortv == 
+//	shortv ==
 
 //	Convienence strings for readability. R1 and R2 begin at the end of their regex placeholder.
 //		Note that "cap" strings begin with a capture parenthesis.
@@ -42,9 +42,9 @@ const Match		Stemmer::re_xVxs	("^.*[aeiouy].+s$");	//	remove ending "s"
 //	step 1b
 const Match		Stemmer::re_eed_eedly(s_R1cap + "ee)(?:d|dly)$");			//	remove ending
 const Match		Stemmer::re_ed_ingly(s_R1cap + ")(?:ed|edly|ing|ingly)$");	//	remove ending
-const Match		Stemmer::re_at_bl_iz("(?:[^aeiou]at|bl|iz)$");						//	add "e" to end
+const Match		Stemmer::re_at_bl_iz("(?:[^aeiou]at|bl|iz)$");				//	add "e" to end
 const Match		Stemmer::re_dbl_end	("^..+([bdfgmnprt])\\1$");				//	remove extra letter at end
-const Match		Stemmer::re_vwxY	("(?:[^aeiouywxY][aeiouy][^aeiouy]|[^aeiouy][aeiouy])$");
+const Match		Stemmer::re_vwxY	("(?:[^aeiouywxy][aeiouy][^aeiouy]|[^aeiouy][aeiouy])$");	//	Y
 
 const Match		Stemmer::re_cvc		("[^aeiou][aeiouy][^aeiouy]");
 

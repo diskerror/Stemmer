@@ -11,11 +11,9 @@ namespace Pcre2 {
 
 class Match : public Pcre2
 {
-	int32_t	doMatch(const char*, const uint32_t = 0) const;
-	
 public:
-		Match(const char*, const uint32_t = 0);
-		Match(const std::string&, const uint32_t = 0);
+		Match(const char*);
+		Match(const std::string&);
 	
 	bool operator()(const std::string&, const uint32_t = 0) const;
 	bool operator()(const std::string&, std::vector<std::string>&, const uint32_t = 0) const;

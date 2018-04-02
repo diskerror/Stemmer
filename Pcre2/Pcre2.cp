@@ -5,67 +5,86 @@
 // using namespace Pcre2;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-Pcre2::Pcre2::Pcre2(const char* expression, uint32_t syntaxOption)
+Pcre2::Pcre2::Pcre2(const char* expression)
 {
-	Pcre2::Pcre2::init(expression, syntaxOption);
+	Pcre2::Pcre2::init(expression);
 }
 
-Pcre2::Pcre2::Pcre2(const std::string& expression, uint32_t syntaxOption)
+Pcre2::Pcre2::Pcre2(const std::string & expression)
 {
-	Pcre2::Pcre2::init(expression.c_str(), syntaxOption);
+	Pcre2::Pcre2::init(expression.c_str());
 }
 
-void Pcre2::Pcre2::init(const char* expression, uint32_t syntaxOption)
+void Pcre2::Pcre2::init(const char* expression)
 {
-	int errorcode;
+	int        errorcode;
 	PCRE2_SIZE erroroffset;
-	
-	this->_regex = pcre2_compile(
+
+	_regex = pcre2_compile(
 		(PCRE2_SPTR) expression,
 		PCRE2_ZERO_TERMINATED,
-		syntaxOption,
+		PCRE2_UTF | PCRE2_NO_UTF_CHECK,
 		&errorcode,
 		&erroroffset,
-		NULL	//	match context
+		NULL    //	match context
 	);
-	
-	if ( this->_regex == NULL )
-		throw Exception( errorcode );
-	
-	pcre2_jit_compile(this->_regex, PCRE2_JIT_COMPLETE);
+	if (_regex == NULL)
+		throw Exception(errorcode);
 
-	this->_match_data = pcre2_match_data_create_from_pattern(this->_regex, NULL);
+	int jitError = pcre2_jit_compile(_regex, PCRE2_JIT_COMPLETE);
+	if (jitError)
+		throw Exception(jitError);
+
+	_mcontext = pcre2_match_context_create(NULL);
+	if (_mcontext == NULL)
+		throw Exception(-1);
+
+	_jit_stack = pcre2_jit_stack_create(8 * 1024, 256 * 1024, NULL);
+	pcre2_jit_stack_assign(_mcontext, NULL, _jit_stack);
+
+	_match_data = pcre2_match_data_create_from_pattern(_regex, NULL);
+	if (_match_data == NULL)
+		throw Exception(-1);
 }
 
 Pcre2::Pcre2::~Pcre2()
 {
-	pcre2_match_data_free(this->_match_data);
-	pcre2_code_free(this->_regex);
+	if (_match_data != NULL)
+		pcre2_match_data_free(_match_data);
+
+	if (_jit_stack != NULL)
+		pcre2_jit_stack_free(_jit_stack);
+
+	if (_mcontext != NULL)
+		pcre2_match_context_free(_mcontext);
+
+	if (_regex != NULL)
+		pcre2_code_free(_regex);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 Pcre2::Exception::Exception(int32_t err)
 {
-	this->_err = err;
-	this->_message = NULL;
+	_err     = err;
+	_message = NULL;
 }
 
 Pcre2::Exception::~Exception()
 {
-	if ( this->_message != NULL )
-		delete this->_message;
+	if (_message != NULL)
+		delete _message;
 }
-	
+
 const unsigned char* Pcre2::Exception::what()
 {
-	if ( this->_message == NULL ) {
+	if (_message == NULL) {
 		uint32_t messgLen = 2048;
-		this->_message = new unsigned char(messgLen);
-		pcre2_get_error_message(this->_err, (PCRE2_UCHAR8*) this->_message, messgLen);
-	
-		strcat( (char*) this->_message, "\n" );
-		strcat( (char*) this->_message, std::exception::what() );
+		_message = new unsigned char(messgLen);
+		pcre2_get_error_message(_err, (PCRE2_UCHAR8*) _message, messgLen);
+
+		strcat((char*) _message, "\n");
+		strcat((char*) _message, std::exception::what());
 	}
-	
-	return (const unsigned char*) this->_message;
+
+	return (const unsigned char*) _message;
 }
