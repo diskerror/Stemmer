@@ -3,6 +3,7 @@ A stemmer based on the Porter 2 stemmer primarily using regular expressions. It 
 
 Sample text files are at http://snowball.tartarus.org.
 
+## Testing
 The makefiles have been tested on Debian 8 with PHP 5.6 and 7.2,  and CentOS 6 with PHP 5.5.
 
 ## MultiTokenizer
