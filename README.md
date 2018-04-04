@@ -3,7 +3,7 @@ A stemmer based on the Porter 2 stemmer primarily using regular expressions. It 
 
 Sample text files are at http://snowball.tartarus.org.
 
-The makefiles have been tested on Debian 8 with PHP 5.6 and CentOS 6 with PHP 5.5. It is currently being tested on PHP 7.2.
+The makefiles have been tested on Debian 8 with PHP 5.6 and 7.2,  and CentOS 6 with PHP 5.5.
 
 ## MultiTokenizer
 This is used with the Stemmer PHP extension. It's a simple text tokenizer that allows for multiple characters to be used as a delimiter.
