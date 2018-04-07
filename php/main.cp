@@ -21,7 +21,7 @@ Php::Value stem(Php::Parameters &params)
 	int prefs = 0;
 	
 	if ( params.size() > 1 ) {
-		prefs = (long) params[1];
+		prefs = (int) params[1];
 	}
 	
 	string outputText, token, thisOne, lastOne;
@@ -95,11 +95,10 @@ extern "C" {
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_ARRAY", DISKERROR_STEM_RETURN_ARRAY));
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_BIGRAM", DISKERROR_STEM_RETURN_BIGRAM));
         
-//        extension.add( "Diskerror\\Stem", stem, {
-//        	Php::ByVal("subject", Php::Type::String),
-//        	Php::ByVal("options", Php::Type::Numeric, false)
-//        } );
-		extension.add<stem>( "Diskerror\\Stem" );
+		extension.add<stem>( "Diskerror\\Stem", {
+        	Php::ByVal("subject", Php::Type::String),
+        	Php::ByVal("options", Php::Type::Numeric, false)
+        } );
 
         // return the extension
         return extension;

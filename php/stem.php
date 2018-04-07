@@ -12,3 +12,4 @@ fwrite(STDOUT, stem($t) . "\n");
 // fwrite(STDOUT, stem($t, DISKERROR_STEM_RETURN_BIGRAM) . "\n");
 //
 // fwrite(STDOUT, print_r(stem($t, DISKERROR_STEM_RETURN_ARRAY|DISKERROR_STEM_RETURN_BIGRAM), true));
+

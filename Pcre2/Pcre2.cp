@@ -17,19 +17,19 @@ Pcre2::Pcre2::Pcre2(const std::string & expression)
 
 void Pcre2::Pcre2::init(const char* expression)
 {
-	int        errorcode;
-	PCRE2_SIZE erroroffset;
+	int        errorCode = 0;
+	PCRE2_SIZE errorOffset = 0;
 
 	_regex = pcre2_compile(
 		(PCRE2_SPTR) expression,
 		PCRE2_ZERO_TERMINATED,
 		PCRE2_UTF | PCRE2_NO_UTF_CHECK,
-		&errorcode,
-		&erroroffset,
+		&errorCode,
+		&errorOffset,
 		NULL    //	match context
 	);
 	if (_regex == NULL)
-		throw Exception(errorcode);
+		throw Exception(errorCode);
 
 	int jitError = pcre2_jit_compile(_regex, PCRE2_JIT_COMPLETE);
 	if (jitError)
