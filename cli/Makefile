@@ -1,6 +1,6 @@
 
 COMP = g++
-CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/usr/local/include -O2
+CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/usr/local/include -O2 -DREGEX_ENG=Pcre2
 CPP	= $(CXX) -include "precompile.hpp" $<
 RM	= rm -f
 
@@ -22,12 +22,13 @@ OBJECTS = \
 all: stem
 
 pre: cleanpre \
-	precompile.o
+	obj/precompile.o
 
-stem: $(OBJECTS) precompile.o
-	$(COMP) $(LDLIBS) $(OBJECTS) -o $@
+stem: obj/precompile.o $(OBJECTS)
+	$(COMP) $(OBJECTS) $(LDLIBS) -o $@
 
 obj/precompile.o: precompile.hpp
+	mkdir -p obj
 	$(CXX) -x c++-header $< -o $@
 
 obj/Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
@@ -56,4 +57,4 @@ clean:
 	$(RM) $(OBJECTS) stem
 
 cleanpre:
-	$(RM) precompile.o
+	$(RM) obj/precompile.o
