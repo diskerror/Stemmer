@@ -19,23 +19,23 @@ Match::Match(const string& expression)
  *
  * "subject" is null terminated.
  */
-bool Match::operator()(const string& subject, const uint32_t offset) const
+bool Match::operator()(const string& subject) const
 {
 	int32_t matchCount = pcre2_match(
-		this->_regex,
+		_regex,
 		(const PCRE2_UCHAR*) subject.c_str(),
-		PCRE2_ZERO_TERMINATED,
-		offset,
-		PCRE2_NO_UTF_CHECK,
-		this->_match_data,
-		NULL
+		subject.size(),
+		0,       // offset
+		PCRE2_NO_UTF_CHECK|PCRE2_NOTEMPTY,
+		_match_data,
+		_mcontext
 	);
-
-	if ( matchCount < PCRE2_ERROR_NOMATCH )
-		throw new Exception( matchCount );
 
 	if ( matchCount == PCRE2_ERROR_NOMATCH )
 		return false;
+
+	if ( matchCount < PCRE2_ERROR_NOMATCH )
+		throw new Exception( matchCount );
 
 	return true;
 }
@@ -49,26 +49,26 @@ bool Match::operator()(const string& subject, const uint32_t offset) const
  * "subject" is null terminated.
  * "matches" must be a valid pointer to a vector of strings.
  */
-bool Match::operator()(const string& subject, vector<string>& matches, const uint32_t offset) const
+bool Match::operator()(const string& subject, vector<string>& matches) const
 {
 	const char *subjectC(subject.c_str());
 
 	int32_t matchCount = pcre2_match(
-		this->_regex,
+		_regex,
 		(const PCRE2_UCHAR*) subjectC,
-		PCRE2_ZERO_TERMINATED,
-		offset,
-		PCRE2_NO_UTF_CHECK,
-		this->_match_data,
-		NULL
+		strlen(subjectC),
+		0,       // offset
+		PCRE2_NO_UTF_CHECK|PCRE2_NOTEMPTY,
+		_match_data,
+		_mcontext
 	);
-
-	if ( matchCount < PCRE2_ERROR_NOMATCH )
-		throw new Exception( matchCount );
 
 	matches.clear();
 	if ( matchCount == PCRE2_ERROR_NOMATCH )
 		return false;
+
+	if ( matchCount < PCRE2_ERROR_NOMATCH )
+		throw new Exception( matchCount );
 
 	//	Now it must be good. Get the first set of captures.
 	PCRE2_SIZE* ovector = pcre2_get_ovector_pointer(this->_match_data);

@@ -15,8 +15,8 @@ public:
 		Match(const char*);
 		Match(const std::string&);
 	
-	bool operator()(const std::string&, const uint32_t = 0) const;
-	bool operator()(const std::string&, std::vector<std::string>&, const uint32_t = 0) const;
+	bool operator()(const std::string&) const;
+	bool operator()(const std::string&, std::vector<std::string>&) const;
 	
 };
 

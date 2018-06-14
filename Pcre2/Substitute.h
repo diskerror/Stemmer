@@ -16,7 +16,7 @@ public:
 		Substitute(const char*, const char*);
 		Substitute(const std::string&, const char*);
 	
-	std::string	operator() (const std::string&, const uint32_t = 0) const;
+	std::string	operator() (const std::string&) const;
 	
 };
 

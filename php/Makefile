@@ -31,9 +31,6 @@ OBJECTS = \
 
 all: $(EXTENSION)
 
-pre: cleanall \
-	obj/precompile.o
-
 $(EXTENSION): obj/precompile.o $(OBJECTS)
 	$(LINKER) $(OBJECTS) $(LINKER_FLAGS) $(LDLIBS) -o $@
 
@@ -45,22 +42,22 @@ obj/precompile.o: precompile.hpp
 obj/Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
 	$(CPP)
 
-obj/Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h
+obj/Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h ../Pcre2/Pcre2.h
 	$(CPP)
 
-obj/Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h
+obj/Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h ../Pcre2/Pcre2.h
 	$(CPP)
 
 obj/MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
 	$(CPP)
 
-obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h
+obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h ../Pcre2/Substitute.h ../Pcre2/Pcre2.h ../Pcre2/Match.h
 	$(CPP)
 
-obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h
+obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h ../Pcre2/Substitute.h ../Pcre2/Pcre2.h ../Pcre2/Match.h
 	$(CPP)
 
-obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h
+obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Pcre2/Substitute.h ../Pcre2/Pcre2.h ../Pcre2/Match.h
 	$(CPP)
 
 
@@ -96,8 +93,4 @@ uninstall:
 	rm -f /etc/php.d/$(INI) /etc/php-zts.d/$(INI)
 
 clean:
-	rm -f $(EXTENSION) $(OBJECTS)
-
-# remove all objects including precompiled header
-cleanall:
 	rm -rf $(EXTENSION) obj

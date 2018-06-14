@@ -23,7 +23,7 @@ is vowel
 Should vowels include an apostrophy? ie. "don't"?
 Should vowels follow the perlmonks pattern?
 http://www.perlmonks.org/?node_id=592883
-my @vowels = ( /[aeiuo]/gi );
+my @vowels = ( /[aeiou]/gi );
 my @vowels = ( /[aeiou]|y(?![aeiou])/gi );
 my @vowels = ( /[aeiou]|(?<![aeiou])y(?![aeiou])/gi );
 */

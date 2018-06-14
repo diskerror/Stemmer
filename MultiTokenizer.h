@@ -14,27 +14,27 @@
 
 class MultiTokenizer
 {
-protected:
+		protected:
 
-	std::regex*		delimRegex;
-	
+		std::regex * delimRegex;
+
 	std::stringstream* tokens;
-	
-public:
-					MultiTokenizer();
-					MultiTokenizer(std::string&);
-					
-// 					MultiTokenizer(const MultiTokenizer&){}
-// 	void			MultiTokenizer operator=(const MultiTokenizer&){}
-					
-					~MultiTokenizer();
-	
-	void			SetDelimiter(std::string&);
-	
-	void			SetText(std::string&);
-	
-	std::string		Get();
+
+	public:
+	MultiTokenizer();
+	MultiTokenizer(std::string&);
+
+//	MultiTokenizer(const MultiTokenizer&){}
+//	void MultiTokenizer operator=(const MultiTokenizer&){}
+
+	~MultiTokenizer();
+
+	void SetDelimiter(std::string&);
+
+	void SetText(std::string&);
+
+	std::string        Get();
 
 };
 
-#endif	//	DISKERROR_MULTITOKENIZER_H
+#endif    //	DISKERROR_MULTITOKENIZER_H

@@ -11,82 +11,66 @@ enum {
 	DISKERROR_STEM_RETURN_BIGRAM
 };
 
-
 Php::Value stem(Php::Parameters &params)
 {
-    static MultiTokenizer tokenizer;
-    
-    string p = params[0];
+	static MultiTokenizer tokenizer;
+
+	string p = params[0];
 	tokenizer.SetText(p);
 	int prefs = 0;
-	
-	if ( params.size() > 1 ) {
+
+	if (params.size() > 1) {
 		prefs = (int) params[1];
 	}
-	
+
 	string outputText, token, thisOne, lastOne;
-	Php::Array outputArray;
-	int i = 0;
-	Php::Value outputData;
-	
-    switch ( prefs ) {
-    	case 0:
-		while( (token = tokenizer.Get()) != "" ) {
-			outputText += Stemmer::StemWord(token) + " ";
-		}
-		
-		if ( outputText.size() ) {
-			outputText.pop_back();	//	remove extra space at end if not empty
-		}
-		
-		outputData = outputText;
-    	break;
-    	
-    	
-    	case DISKERROR_STEM_RETURN_ARRAY:
-		while( (token = tokenizer.Get()) != "" ) {
-			outputArray[i++] = Stemmer::StemWord(token);
-		}
-		outputData = outputArray;
-    	break;
-    	
-    	
-    	case DISKERROR_STEM_RETURN_BIGRAM:
-		while( (token = tokenizer.Get()) != "" ) {
-			thisOne = Stemmer::StemWord(token);
-			outputText += (lastOne + thisOne + " ");
-			lastOne = thisOne;
-		}
-		outputText += lastOne;
-		outputData = outputText;
-    	break;
-    	
-    	
-    	case DISKERROR_STEM_RETURN_ARRAY|DISKERROR_STEM_RETURN_BIGRAM:
-		while( (token = tokenizer.Get()) != "" ) {
-			thisOne = Stemmer::StemWord(token);
-			outputArray[i++] = (lastOne + thisOne);
-			lastOne = thisOne;
-		}
-		outputArray[i] = lastOne;
-		outputData = outputArray;
-    	break;
-    }
-    
-    return outputData;
+	vector<string> outputArray;
+
+	switch (prefs) {
+		case 0:
+			while ((token = tokenizer.Get()) != "") {
+				outputText += Stemmer::StemWord(token) + " ";
+			}
+
+			if (outputText.size()) {
+				outputText.pop_back();    //	remove extra space at end if not empty
+			}
+
+			return outputText;
+
+		case DISKERROR_STEM_RETURN_ARRAY:
+			while ((token = tokenizer.Get()) != "") {
+				outputArray.emplace_back(Stemmer::StemWord(token));
+			}
+			return outputArray;
+
+		case DISKERROR_STEM_RETURN_BIGRAM:
+			while ((token = tokenizer.Get()) != "") {
+				thisOne = Stemmer::StemWord(token);
+				outputText += (lastOne + thisOne + " ");
+				lastOne = thisOne;
+			}
+			outputText += lastOne;
+			return outputText;
+
+		case DISKERROR_STEM_RETURN_ARRAY | DISKERROR_STEM_RETURN_BIGRAM:
+			while ((token = tokenizer.Get()) != "") {
+				thisOne = Stemmer::StemWord(token);
+				outputArray.emplace_back(lastOne + thisOne);
+				lastOne = thisOne;
+			}
+			outputArray.emplace_back(lastOne);
+			return outputArray;
+
+		default:
+			throw Php::Exception("option does not exist");
+	}
 }
 
 
 extern "C" {
     
-    /**
-     *  Function that is called by PHP right after the PHP process
-     *  has started, and that returns an address of an internal PHP
-     *  strucure with all the details and features of your extension
-     *
-     *  @return void*   a pointer to an address that is understood by PHP
-     */
-    PHPCPP_EXPORT void *get_module() 
+    PHPCPP_EXPORT void *get_module()
     {
         // static(!) Php::Extension object that should stay in memory
         // for the entire duration of the process (that's why it's static)

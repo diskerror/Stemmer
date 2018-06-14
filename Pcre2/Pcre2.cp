@@ -22,11 +22,11 @@ void Pcre2::Pcre2::init(const char* expression)
 
 	_regex = pcre2_compile(
 		(PCRE2_SPTR) expression,
-		PCRE2_ZERO_TERMINATED,
+		strlen((const char*) expression),
 		PCRE2_UTF | PCRE2_NO_UTF_CHECK,
 		&errorCode,
 		&errorOffset,
-		NULL    //	match context
+		NULL
 	);
 	if (_regex == NULL)
 		throw Exception(errorCode);
@@ -49,17 +49,10 @@ void Pcre2::Pcre2::init(const char* expression)
 
 Pcre2::Pcre2::~Pcre2()
 {
-	if (_match_data != NULL)
-		pcre2_match_data_free(_match_data);
-
-	if (_jit_stack != NULL)
-		pcre2_jit_stack_free(_jit_stack);
-
-	if (_mcontext != NULL)
-		pcre2_match_context_free(_mcontext);
-
-	if (_regex != NULL)
-		pcre2_code_free(_regex);
+	pcre2_match_data_free(_match_data);
+	pcre2_jit_stack_free(_jit_stack);
+	pcre2_match_context_free(_mcontext);
+	pcre2_code_free(_regex);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +71,7 @@ Pcre2::Exception::~Exception()
 const unsigned char* Pcre2::Exception::what()
 {
 	if (_message == NULL) {
-		uint32_t messgLen = 2048;
+		uint32_t messgLen = 256;
 		_message = new unsigned char(messgLen);
 		pcre2_get_error_message(_err, (PCRE2_UCHAR8*) _message, messgLen);
 

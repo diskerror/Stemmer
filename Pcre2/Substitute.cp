@@ -1,23 +1,23 @@
 
 #include "Substitute.h"
 
-using namespace Pcre2;
+//using namespace Pcre2;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-Substitute::Substitute(const char* expression, const char* replacement)
+Pcre2::Substitute::Substitute(const char* expression, const char* replacement)
 	: Pcre2(expression)
 {
 	_replace = replacement;
 }
 
-Substitute::Substitute(const std::string& expression, const char* replacement)
+Pcre2::Substitute::Substitute(const std::string& expression, const char* replacement)
 	: Pcre2(expression.c_str())
 {
 	_replace = replacement;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string Substitute::operator()(const std::string& subject, const uint32_t offset) const
+std::string Pcre2::Substitute::operator()(const std::string& subject) const
 {
 	uint32_t subjectLen = subject.size();
 	
@@ -28,8 +28,8 @@ std::string Substitute::operator()(const std::string& subject, const uint32_t of
 		_regex,
 		(const PCRE2_UCHAR*) subject.c_str(),
 		PCRE2_ZERO_TERMINATED,
-		offset,
-		PCRE2_NO_UTF_CHECK,
+		0,   //offset
+		PCRE2_NO_UTF_CHECK|PCRE2_NOTEMPTY,
 		_match_data,
 		_mcontext,
 		(const PCRE2_UCHAR*) _replace,

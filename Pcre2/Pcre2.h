@@ -8,46 +8,44 @@
 #include <pcre2.h>
 
 #include <string>
-#include <stdexcept>
+#include <exception>
 
 namespace Pcre2
 {
 
-	class Pcre2
-	{
-		Pcre2(){};
-		void init(const char *);
+class Pcre2
+{
+	Pcre2(){};
+	void init(const char *);
 
-	protected:
-		pcre2_code          *_regex;
-		pcre2_match_data    *_match_data;
-		pcre2_match_context *_mcontext;
-		pcre2_jit_stack     *_jit_stack;
+protected:
+	pcre2_code          *_regex;
+	pcre2_match_data    *_match_data;
+	pcre2_match_context *_mcontext;
+	pcre2_jit_stack     *_jit_stack;
 
-	public:
-		Pcre2(const char*);
-		Pcre2(const std::string &);
-		virtual ~Pcre2();
+public:
+	Pcre2(const char*);
+	Pcre2(const std::string &);
+	virtual ~Pcre2();
 
-		// 	virtual bool	exec(const char*) = 0;	--	OR
-		// 	virtual const char*	exec(const char*) = 0;
+	// 	virtual bool	exec(const char*) = 0;	--	OR
+	// 	virtual const char*	exec(const char*) = 0;
 
-	};
+};
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	class
-Exception :
-	public std::exception
-	{
-		int32_t       _err;
-		unsigned char *_message;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class Exception : public std::exception
+{
+	int32_t       _err;
+	unsigned char *_message;
 
-	public:
-		Exception(int32_t err);
-		virtual ~Exception();
+public:
+	Exception(int32_t);
+	virtual ~Exception();
 
-		const unsigned char *what();
-	};
+	const unsigned char *what();
+};
 
 }
 
