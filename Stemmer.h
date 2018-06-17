@@ -77,7 +77,7 @@ protected:
 	static const HasMatch		hm_izer;
 	static const HasMatch		hm_fulness;
 
-// 	//	step 3
+	//	step 3
 // 	static const HasMatch		hm_ational;
 // 	static const HasMatch		hm_tional;
 	static const HasMatch		hm_alize;
@@ -87,16 +87,18 @@ protected:
 	static const HasMatch		hm_ness;
 	static const HasMatch		hm_ative;
 
-// 	//	step 4
-// 	static const Hyperscan::Match		re_ement;
-// 	static const Hyperscan::Match		re_ment;
-// 	static const Hyperscan::Match		re_ent;
-// 	static const Hyperscan::Match		re_al_er_ic;
-// 	static const Hyperscan::Match		re_R2stion;
-//
-// 	//	step 5
-// 	static const Hyperscan::Match		re_R2e;
-// 	static const Hyperscan::Match		re_R2ll;
+	//	step 4
+	static const HasMatch		hm_ement;
+	static const HasMatch		hm_ment;
+	static const HasMatch		hm_ent;
+	static const HasMatch		hm_al_er_ic;
+	static const HasMatch		hm_ant_ize;
+	static const HasMatch		hm_ance_ible;
+	static const HasMatch		hm_R2stion;
+
+	//	step 5
+	static const HasMatch		hm_R2e;
+	static const HasMatch		hm_R2ll;
 
 public:
 

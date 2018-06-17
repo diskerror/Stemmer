@@ -90,11 +90,8 @@ string Stemmer::StemWord(string in)
 	}
 
 
-	//	Place to put a returned match.
-	string match;
-
 	//	Over-stemmed words: match "gener" + one or more vowels + one consonant
-	match = gm_generVC(in);
+	string match = gm_generVC(in);
 	if ( !match.empty() )
 		return match;
 
@@ -132,34 +129,25 @@ string Stemmer::StemWord(string in)
 	else if ( hm_ed_ingly(in) ) {
 		rm_ed_ingly(in);
 // cout << setw(5) << left << __LINE__ << in << endl;
-		if ( hm_at_bl_iz(in) ) {
+		if ( hm_at_bl_iz(in) || hm_vwxY(in) ) {
 			in += "e";
 		}
-		else if ( hm_dbl_end(in) ) {
-			in.resize(in.size()-1);
-		}
-		else if ( hm_vwxY(in) ) {
-			in += "e";
-		}
+	}
+	if ( hm_dbl_end(in) ) {
+		in.resize(in.size()-1);
 	}
 // cout << setw(5) << left << __LINE__ << in << endl;
-	//	My addition that solves some "e" endings.
-	if ( in.size() == 2 ) {
-		in += "e";
+	//	2 is my addition that solves some "e" endings.
+	switch( in.size() ) {
+		case 3:
+		if ( hm_cvc(in) ) {
+			in += "e";
+		}
+		case 2:
+// 		in += "e";
+		case 1:
 // 		toLower(in);
 		return in;
-	}
-	else {
-		switch( in.size() ) {
-			case 3:
-			if ( hm_cvc(in) ) {
-				in += "e";
-			}
-			case 2:
-			case 1:
-// 			toLower(in);
-			return in;
-		}
 	}
 
 
@@ -327,35 +315,34 @@ string Stemmer::StemWord(string in)
 	}
 // cout << setw(5) << left << __LINE__ << in << endl;
 
-// 	//	Step 4
-// 	if ( re_ement(in) ) {
-// 		in.resize(in.size()-5);
-// 	}
-// 	else if ( re_ment(in, matches) ) {
-// 		in.resize(in.size()-4);
-// 	}
-// 	else if ( re_ent(in, matches) ) {
-// 		in.resize(in.size()-3);
-// 	}
-// 	else if ( re_al_er_ic(in, matches) ) {
-// 		in = matches[1];
-// 	}
-// 	else if ( re_R2stion(in) ) {
-// 		in.resize(in.size()-3);
-// 	}
-// // cout << setw(5) << left << __LINE__ << in << endl;
-//
-// 	//	Step 5 (partial)
-// 	if ( re_R2e(in) ) {
-// 		in.resize(in.size()-1);
-// 	}
-// 	else if ( re_R2ll(in) ) {
-// 		in.resize(in.size()-1);
-// 	}
-//
-//
-// 	//	postlude
-// 	//	Change Y to y.
+	//	Step 4
+	if ( hm_ement(in) ) {
+		in.resize(in.size()-5);
+	}
+	else if ( hm_ment(in) ) {
+		in.resize(in.size()-4);
+	}
+	else if ( hm_ent(in) ) {
+		in.resize(in.size()-3);
+	}
+	else if ( hm_al_er_ic(in) ) {
+		in.resize(in.size()-2);
+	}
+	else if ( hm_ant_ize(in) || hm_R2stion(in) ) {
+		in.resize(in.size()-3);
+	}
+	else if ( hm_ance_ible(in) ) {
+		in.resize(in.size()-4);
+	}
+// cout << setw(5) << left << __LINE__ << in << endl;
+
+	//	Step 5 (partial)
+	if ( hm_R2e(in) || hm_R2ll(in) )
+		in.resize(in.size()-1);
+
+
+	//	postlude
+	//	Change Y to y.
 // 	toLower(in);
 
 	return in;

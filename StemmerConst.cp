@@ -53,7 +53,7 @@ const HasMatch		Stemmer::hm_CyY		(".[^aeiou]y$");		//	replace ending "y" with "i
 const HasMatch		Stemmer::hm_anci	(s_R1 + "[ae]nci$");	//	replace ending "nci" with "nce"
 const HasMatch		Stemmer::hm_logi	(s_R1 + "logi$");		//	remove ending "i"
 const HasMatch		Stemmer::hm_bli		(s_R1 + "bli$");		//	replace ending "bli" with "ble"
-const HasMatch		Stemmer::hm_lessli	(s_R1 + "(?:less|ful|ous|ent|al|[cdeghkmnrt])li$");	//	remove ending "li"
+const HasMatch		Stemmer::hm_lessli	(s_R1 + "(less|ful|ous|ent|al|[cdeghkmnrt])li$");	//	remove ending "li"
 const HasMatch		Stemmer::hm_biliti	(s_R1 + "biliti$");		//	replace ending "biliti" with "ble"
 const HasMatch		Stemmer::hm_aliti	(s_R1 + "aliti$");		//	remove ending "iti"
 const HasMatch		Stemmer::hm_iviti	(s_R1 + "iviti$");		//	replace ending "iviti" with "ive"
@@ -64,7 +64,7 @@ const HasMatch		Stemmer::hm_ization	(s_R1 + "ization$");	//	replace ending "izat
 const HasMatch		Stemmer::hm_ation	(s_R1 + "ation$");		//	replace ending "ation" with "ate"
 const HasMatch		Stemmer::hm_ator	(s_R1 + "ator$");		//	replace ending "ator" with "ate"
 const HasMatch		Stemmer::hm_izer	(s_R1 + "izer$");		//	remove ending "r"
-const HasMatch		Stemmer::hm_fulness	(s_R1 + "(?:ful|ous|ive)ness$");	//	remove ending "ness"
+const HasMatch		Stemmer::hm_fulness	(s_R1 + "(ful|ous|ive)ness$");	//	remove ending "ness"
 
 //	step 3
 // const HasMatch		Stemmer::hm_ational	(s_R1 + "ational$");
@@ -76,16 +76,18 @@ const HasMatch		Stemmer::hm_ful		(s_R1 + "ful$");			//	remove ending (3)
 const HasMatch		Stemmer::hm_ness	(s_R1 + "ness$");			//	remove ending
 const HasMatch		Stemmer::hm_ative	(s_R2 + "ative$");			//	remove ending "ative"
 
-// //	step 4
-// const Match		Stemmer::re_ement	(s_R1 + "ement$");		//	remove ending "ement"
-// const Match		Stemmer::re_ment	(s_R1 + "ment$");		//	remove ending "ment"
-// const Match		Stemmer::re_ent		(s_R1 + "ent$");		//	remove ending "ent"
-// const Match		Stemmer::re_al_er_ic(s_R2 + "(?:al|ance|ence|er|ic|able|abli|ible|ant|ism|ate|iti|ous|ive|ize)$");
-// const Match		Stemmer::re_R2stion	(s_R2 + "[st]ion$");	//	remove ending "ion"
-//
-// //	step 5
-// const Match		Stemmer::re_R2e		("(" + s_R2 + "|" + s_R1 + "(?![^aeiouywxY][aeiouy][^aeiouy]))e$");		//	remove ending "e"
-// const Match		Stemmer::re_R2ll	(s_R2 + "ll$");		//	remove ending "l"
+//	step 4
+const HasMatch		Stemmer::hm_ement	(s_R1 + "ement$");		//	remove ending "ement"
+const HasMatch		Stemmer::hm_ment	(s_R1 + "ment$");		//	remove ending "ment"
+const HasMatch		Stemmer::hm_ent		(s_R1 + "ent$");		//	remove ending "ent"
+const HasMatch		Stemmer::hm_al_er_ic(s_R2 + "(al|er|ic)$");
+const HasMatch		Stemmer::hm_ant_ize	(s_R2 + "(ant|ism|ate|iti|ous|ive|ize)$");
+const HasMatch		Stemmer::hm_ance_ible(s_R2 + "(ance|ence|able|abli|ible)$");
+const HasMatch		Stemmer::hm_R2stion	(s_R2 + "[st]ion$");	//	remove ending "ion"
+
+//	step 5
+const HasMatch		Stemmer::hm_R2e		("(" + s_R2 + "|" + s_R1 + "[aeiouywxY][^aeiouy][aeiouy])e$");		//	remove ending "e"
+const HasMatch		Stemmer::hm_R2ll	(s_R2 + "ll$");		//	remove ending "l"
 
 // yellow
 // sky
