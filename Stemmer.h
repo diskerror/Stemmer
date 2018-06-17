@@ -11,92 +11,95 @@ http://snowball.tartarus.org
 #define DISKERROR_STEMMER_H
 #pragma once
 
-#include "Pcre2/Substitute.h"
-#include "Pcre2/Match.h"
+#include "Hyperscan/HasMatch.h"
+#include "Hyperscan/GetMatch.h"
+#include "Hyperscan/RemoveMatch.h"
+#include "Hyperscan/ReplaceMatch.h"
 #include <string>
 
 class Stemmer
 {
 protected:
 
-	static const std::string s_R1cap;
-	static const std::string s_R1;
-	static const std::string s_R2cap;
-	static const std::string s_R2;
-
-	static const Pcre2::Substitute	re_sTrim;
+	//	Convienence strings for readability. R1 and R2 begin at the end of their regex placeholder.
+	static const std::string	s_R1;
+	static const std::string	s_R2;
 
 	//	prelude 1
-	static const Pcre2::Match		re_apos;
-	
-	//	step 0
-	static const Pcre2::Substitute	re_aposS;
-	static const Pcre2::Substitute	re_Sapos;
-	
-	//	over-stem
-	static const Pcre2::Match		re_generVC;
-	
-	//	prelude 2
-	static const Pcre2::Substitute	re_Vy;
-	
-	//	step 1a
-	static const Pcre2::Match		re_sses;
-	static const Pcre2::Match		re_ied_ies;
-	static const Pcre2::Match		re_us_ss;
-	static const Pcre2::Match		re_xVxs;
-	
-	//	step 1b
-	static const Pcre2::Match		re_eed_eedly;
-	static const Pcre2::Match		re_ed_ingly;
-	static const Pcre2::Match		re_at_bl_iz;
-	static const Pcre2::Match		re_dbl_end;
-	static const Pcre2::Match		re_vwxY;
+	//	re_sTrim removes all control characters and spaces from both ends of a word
+	//		and requires a word to have no imbedded control characters.
+	static const RemoveMatch	rm_lsTrim;
+	static const RemoveMatch	rm_rsTrim;
 
-	static const Pcre2::Match		re_cvc;
+	//	step 0
+	static const RemoveMatch	rm_aposS;
+
+	//	over-stem
+	static const GetMatch		gm_generVC;
+
+// 	//	prelude 2
+// 	static const std::regex		re_Vy;
+
+	//	Step_1a
+// 	static const HasMatch		hm_sses;
+// 	static const HasMatch		hm_ied_ies;
+// 	static const HasMatch		hm_us_ss;
+	static const HasMatch		hm_xVxs;
+
+	//	step 1b
+	static const HasMatch		hm_eed;
+	static const HasMatch		hm_eedly;
+	static const HasMatch		hm_ed_ingly;
+	static const RemoveMatch	rm_ed_ingly;
+	static const HasMatch		hm_at_bl_iz;
+	static const HasMatch		hm_dbl_end;
+	static const HasMatch		hm_vwxY;
+
+	static const HasMatch		hm_cvc;
 
 	//	step 1c
-	static const Pcre2::Match		re_CyY;
+	static const HasMatch		hm_CyY;
 
 	//	step 2
-	static const Pcre2::Match		re_anci;
-	static const Pcre2::Match		re_logi;
-	static const Pcre2::Match		re_bli;
-	static const Pcre2::Match		re_lessli;
-	static const Pcre2::Match		re_biliti;
-	static const Pcre2::Match		re_aliti;
-	static const Pcre2::Match		re_iviti;
-	static const Pcre2::Match		re_ational;
-	static const Pcre2::Match		re_tional;
-	static const Pcre2::Match		re_alism;
-	static const Pcre2::Match		re_ization;
-	static const Pcre2::Match		re_ation;
-	static const Pcre2::Match		re_ator;
-	static const Pcre2::Match		re_izer;
-	static const Pcre2::Match		re_fulness;
+	static const HasMatch		hm_anci;
+	static const HasMatch		hm_logi;
+	static const HasMatch		hm_bli;
+	static const HasMatch		hm_lessli;
+	static const HasMatch		hm_biliti;
+	static const HasMatch		hm_aliti;
+	static const HasMatch		hm_iviti;
+	static const HasMatch		hm_ational;
+	static const HasMatch		hm_tional;
+	static const HasMatch		hm_alism;
+	static const HasMatch		hm_ization;
+	static const HasMatch		hm_ation;
+	static const HasMatch		hm_ator;
+	static const HasMatch		hm_izer;
+	static const HasMatch		hm_fulness;
 
-	//	step 3
-// 	static const Pcre2::Match		re_ational;	same as step 2
-// 	static const Pcre2::Match		re_tional;
-	static const Pcre2::Match		re_alize;
-	static const Pcre2::Match		re_icate;
-	static const Pcre2::Match		re_ful_ness;
-	static const Pcre2::Match		re_ative;
-
-	//	step 4
-	static const Pcre2::Match		re_ement;
-	static const Pcre2::Match		re_ment;
-	static const Pcre2::Match		re_ent;
-	static const Pcre2::Match		re_al_er_ic;
-	static const Pcre2::Match		re_R2stion;
-	
-	//	step 5
-	static const Pcre2::Match		re_R2e;
-	static const Pcre2::Match		re_R2ll;
+// 	//	step 3
+// 	// static const Hyperscan::Match		re_ational;
+// 	// static const Hyperscan::Match		re_tional;
+// 	static const Hyperscan::Match		re_alize;
+// 	static const Hyperscan::Match		re_icate;
+// 	static const Hyperscan::Match		re_ful_ness;
+// 	static const Hyperscan::Match		re_ative;
+//
+// 	//	step 4
+// 	static const Hyperscan::Match		re_ement;
+// 	static const Hyperscan::Match		re_ment;
+// 	static const Hyperscan::Match		re_ent;
+// 	static const Hyperscan::Match		re_al_er_ic;
+// 	static const Hyperscan::Match		re_R2stion;
+//
+// 	//	step 5
+// 	static const Hyperscan::Match		re_R2e;
+// 	static const Hyperscan::Match		re_R2ll;
 
 public:
-	
+
 	static std::string StemWord(std::string in);
-	
+
 };
 
 #endif	//	DISKERROR_STEMMER_H

@@ -1,39 +1,44 @@
 
-#include <fstream>
 #include "../MultiTokenizer.h"
 #include "../Stemmer.h"
 
-namespace
-{
-	const size_t SUCCESS = 0;
-// 	const size_t ERROR_IN_COMMAND_LINE = 1;
-	const size_t ERROR_UNHANDLED_EXCEPTION = 2;
-} // namespace
 
 using namespace std;
-// using namespace boost;
-// namespace fs = filesystem;
 
 int main(int argc, char** argv)
 {
 	try {
-		ifstream in(argv[1]);
-// 		ifstream in2(argv[2]);
+		vector<string> args;
+		int32_t i;
+		for(i=0; i<argc; ++i)
+			args.emplace_back(argv[i]);
 
-		if ( !in )  {
-			throw invalid_argument("file name required or bad file");
+
+		//	check for filename parameter
+		string text;
+		bool useFile = false;
+		for(i=0; i<argc; ++i) {
+			if (args[i] == "-f") {
+				useFile = true;
+				ifstream in(args[i+1]);
+
+				if ( !in )  {
+					throw invalid_argument("file name required or bad file");
+				}
+
+				string fromFile((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+				text = fromFile;
+			}
 		}
 
-// 		if ( argc > 2 ) {
-// 			ofstream out(argv[2]);
-// 		}
-// 		else {
-// 			ostream out &= cout;
-// 		}
+		//	must mean to use params as input text
+		if (!useFile) {
+			text = args[1];
+			for(i=2; i<argc; ++i)
+				text += " " + args[i];
+		}
 
-		std::string text((std::istreambuf_iterator<char>(in)),
-                		 std::istreambuf_iterator<char>());
-        
+
         MultiTokenizer tokenizer;
         tokenizer.SetText(text);
 		string token;
@@ -43,10 +48,11 @@ int main(int argc, char** argv)
 		}
 	}
 	catch (exception& e) {
+		cerr << "my exception" << endl;
 		cerr << e.what() << endl;
-		return ERROR_UNHANDLED_EXCEPTION;
+		return EXIT_FAILURE;
 	}
 
-	return SUCCESS;
+	return EXIT_SUCCESS;
 
 } // main

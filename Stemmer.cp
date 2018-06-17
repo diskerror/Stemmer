@@ -10,11 +10,25 @@
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void toLower(string& in)
+inline void toLower(string& in)
 {
 	for(auto &c : in) {
 		c = tolower(c);
 	}
+}
+
+inline bool hasEnding(const string& in, const char* end, uint32_t end_len)
+{
+	uint32_t in_size = in.size();
+	if(in_size < end_len)
+		return false;
+
+	while (end_len > 0) {
+		if (in[--in_size] != end[--end_len])
+			return false;
+	}
+
+	return true;
 }
 
 
@@ -32,35 +46,26 @@ my @vowels = ( /[aeiou]|(?<![aeiou])y(?![aeiou])/gi );
 string Stemmer::StemWord(string in)
 {
 	//	remove spaces at beginning and end of string
-	in = re_sTrim(in);
+	//	Prelude 1
+	rm_lsTrim(in);
+	rm_rsTrim(in);
 
 	toLower(in);
 // cout << setw(5) << left << __LINE__ << in << endl;
 
-	//	Place to put captured matches.
-	vector<string> matches;
-	
-
-	//	Prelude 1
-	if ( re_apos(in, matches) )
-		in = matches[2];
-	
 	//	Words two characters and shorter are not further altered.
-	if (in.size() <= 2) {
+	if (in.size() <= 2)
 		return in;
-	}
-	
+
 	//	Step 0
-	in = re_aposS(in);
+	rm_aposS(in);
 	//	Only remove trailing apostrophe when preceeded by an S.
 	//	This departs from the descriptive text AND ALSO
 	//	departs from the sample output, which doesn't match the description.
-	in = re_Sapos(in);
 
 	//	Words two characters and shorter are not further altered.
-	if (in.size() <= 2) {
+	if (in.size() <= 2)
 		return in;
-	}
 
 
 	//	Exception 1
@@ -83,29 +88,29 @@ string Stemmer::StemWord(string in)
 	) {
 		return in;
 	}
-	
-	
+
+
+	//	Place to put a returned match.
+	string match;
+
 	//	Over-stemmed words: match "gener" + one or more vowels + one consonant
-	if ( re_generVC(in, matches) ) {
-		return matches[1];
-	}
-	
+	match = gm_generVC(in);
+	if ( !match.empty() )
+		return match;
+
 
 	//	Prelude 2
-	in = re_Vy(in);
+// 	in = regex_replace(in, re_Vy, "\\1Y\\2");
 
 
 	//	Step_1a
-	if ( re_sses(in) ) {
+	if ( hasEnding(in, "sses", 4) || hasEnding(in, "ied", 3) || hasEnding(in, "ies", 3) ) {
 		in.resize(in.size()-2);
 	}
-	else if ( re_ied_ies(in) ) {
-		in.resize(in.size()-2);
-	}
-	else if ( re_us_ss(in) ) {
+	else if (hasEnding(in, "us", 2) || hasEnding(in, "ss", 2) ) {
 		;	//	do nothing
 	}
-	else if ( re_xVxs(in) ) {
+	else if ( hm_xVxs(in) ) {
 		in.resize(in.size()-1);
 	}
 
@@ -117,22 +122,23 @@ string Stemmer::StemWord(string in)
 	) {
 		return in;
 	}
-	
+
 // cout << setw(5) << left << __LINE__ << in << endl;
 	//	Step 1b
-	if ( re_eed_eedly(in, matches) ) {
-		in = matches[1];
-	}
-	else if ( re_ed_ingly(in, matches) ) {
-		in = matches[1];
+	if ( hm_eed(in) )
+		in.resize(in.size()-1);
+	else if ( hm_eedly(in) )
+		in.resize(in.size()-3);
+	else if ( hm_ed_ingly(in) ) {
+		rm_ed_ingly(in);
 // cout << setw(5) << left << __LINE__ << in << endl;
-		if ( re_at_bl_iz(in) ) {
+		if ( hm_at_bl_iz(in) ) {
 			in += "e";
 		}
-		else if ( re_dbl_end(in) ) {
+		else if ( hm_dbl_end(in) ) {
 			in.resize(in.size()-1);
 		}
-		else if ( re_vwxY(in) ) {
+		else if ( hm_vwxY(in) ) {
 			in += "e";
 		}
 	}
@@ -140,24 +146,25 @@ string Stemmer::StemWord(string in)
 	//	My addition that solves some "e" endings.
 	if ( in.size() == 2 ) {
 		in += "e";
-		toLower(in);
+// 		toLower(in);
 		return in;
 	}
-//	else {
-//		switch( in.size() ) {
-//			case 3:
-//			if ( re_cvc(in) ) {
-//				in += "e";
-//			}
-//			case 1:
-//			toLower(in);
-//			return in;
-//		}
-//	}
+	else {
+		switch( in.size() ) {
+			case 3:
+			if ( hm_cvc(in) ) {
+				in += "e";
+			}
+			case 2:
+			case 1:
+// 			toLower(in);
+			return in;
+		}
+	}
 
 
 	//	Step 1c
-	if ( re_CyY(in) )
+	if ( hm_CyY(in) )
 		in[in.size()-1] = 'i';
 
 // cout << setw(5) << left << __LINE__ << in << endl;
@@ -299,57 +306,57 @@ string Stemmer::StemWord(string in)
 	    ful:   delete
 	   ness:   delete
 	*/
-	if ( re_ational(in) ) {
-		in.resize(in.size()-4);
-		in[in.size()-1] = 'e';
-	}
-	else if ( re_tional(in) ) {
-		in.resize(in.size()-2);
-	}
-	else if ( re_alize(in) ) {
-		in.resize(in.size()-3);
-	}
-	else if ( re_icate(in, matches) ) {
-		in = matches[1];
-	}
-	else if ( re_ful_ness(in, matches) ) {
-		in = matches[1];
-	}
-	else if ( re_ative(in) ){
-		in.resize(in.size()-5);
-	}
-// cout << setw(5) << left << __LINE__ << in << endl;
+// 	if ( re_ational(in) ) {
+// 		in.resize(in.size()-4);
+// 		in[in.size()-1] = 'e';
+// 	}
+// 	else if ( re_tional(in) ) {
+// 		in.resize(in.size()-2);
+// 	}
+// 	else if ( re_alize(in) ) {
+// 		in.resize(in.size()-3);
+// 	}
+// 	else if ( re_icate(in, matches) ) {
+// 		in = matches[1];
+// 	}
+// 	else if ( re_ful_ness(in, matches) ) {
+// 		in = matches[1];
+// 	}
+// 	else if ( re_ative(in) ){
+// 		in.resize(in.size()-5);
+// 	}
+// // cout << setw(5) << left << __LINE__ << in << endl;
+//
+// 	//	Step 4
+// 	if ( re_ement(in) ) {
+// 		in.resize(in.size()-5);
+// 	}
+// 	else if ( re_ment(in, matches) ) {
+// 		in.resize(in.size()-4);
+// 	}
+// 	else if ( re_ent(in, matches) ) {
+// 		in.resize(in.size()-3);
+// 	}
+// 	else if ( re_al_er_ic(in, matches) ) {
+// 		in = matches[1];
+// 	}
+// 	else if ( re_R2stion(in) ) {
+// 		in.resize(in.size()-3);
+// 	}
+// // cout << setw(5) << left << __LINE__ << in << endl;
+//
+// 	//	Step 5 (partial)
+// 	if ( re_R2e(in) ) {
+// 		in.resize(in.size()-1);
+// 	}
+// 	else if ( re_R2ll(in) ) {
+// 		in.resize(in.size()-1);
+// 	}
+//
+//
+// 	//	postlude
+// 	//	Change Y to y.
+// 	toLower(in);
 
-	//	Step 4
-	if ( re_ement(in) ) {
-		in.resize(in.size()-5);
-	}
-	else if ( re_ment(in, matches) ) {
-		in.resize(in.size()-4);
-	}
-	else if ( re_ent(in, matches) ) {
-		in.resize(in.size()-3);
-	}
-	else if ( re_al_er_ic(in, matches) ) {
-		in = matches[1];
-	}
-	else if ( re_R2stion(in) ) {
-		in.resize(in.size()-3);
-	}
-// cout << setw(5) << left << __LINE__ << in << endl;
-
-	//	Step 5 (partial)
-	if ( re_R2e(in) ) {
-		in.resize(in.size()-1);
-	}
-	else if ( re_R2ll(in) ) {
-		in.resize(in.size()-1);
-	}
-	
-
-	//	postlude
-	//	Change Y to y.
-	toLower(in);
-	
 	return in;
 }
