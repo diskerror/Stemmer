@@ -66,14 +66,16 @@ const HasMatch		Stemmer::hm_ator	(s_R1 + "ator$");		//	replace ending "ator" wit
 const HasMatch		Stemmer::hm_izer	(s_R1 + "izer$");		//	remove ending "r"
 const HasMatch		Stemmer::hm_fulness	(s_R1 + "(?:ful|ous|ive)ness$");	//	remove ending "ness"
 
-// //	step 3
-// // const Match		Stemmer::re_ational(s_R1 + "ational$");
-// // const Match		Stemmer::re_tional	(s_R1 + "tional$");
-// const Match		Stemmer::re_alize	(s_R1 + "alize$");					//	remove ending "ize"
-// const Match		Stemmer::re_icate	(s_R1 + "ic(?:ate|iti|al)$");	//	remove ending
-// const Match		Stemmer::re_ful_ness(s_R1 + "(?:ful|ness)$");		//	remove ending
-// const Match		Stemmer::re_ative	(s_R2 + "ative$");					//	remove ending "ative"
-//
+//	step 3
+// const HasMatch		Stemmer::hm_ational	(s_R1 + "ational$");
+// const HasMatch		Stemmer::hm_tional	(s_R1 + "tional$");
+const HasMatch		Stemmer::hm_alize	(s_R1 + "alize$");			//	remove ending "ize"
+const HasMatch		Stemmer::hm_icate	(s_R1 + "ic(ate|iti)$");	//	remove ending (3)
+const HasMatch		Stemmer::hm_ical	(s_R1 + "ical$");			//	remove 2
+const HasMatch		Stemmer::hm_ful		(s_R1 + "ful$");			//	remove ending (3)
+const HasMatch		Stemmer::hm_ness	(s_R1 + "ness$");			//	remove ending
+const HasMatch		Stemmer::hm_ative	(s_R2 + "ative$");			//	remove ending "ative"
+
 // //	step 4
 // const Match		Stemmer::re_ement	(s_R1 + "ement$");		//	remove ending "ement"
 // const Match		Stemmer::re_ment	(s_R1 + "ment$");		//	remove ending "ment"

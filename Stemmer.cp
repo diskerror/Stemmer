@@ -210,35 +210,35 @@ string Stemmer::StemWord(string in)
 		case 'i':
 		switch ( in[in.size()-2] ) {
 			case 'c':
-			if ( re_anci(in) ) {
+			if ( hm_anci(in) ) {
 				in[in.size()-1] = 'e';
 			}
 			break;
 
 			case 'g':
-			if ( re_logi(in) ) {
+			if ( hm_logi(in) ) {
 				in.resize(in.size()-1);
 			}
 			break;
 
 			case 'l':
-			if ( re_bli(in) ) {
+			if ( hm_bli(in) ) {
 				in[in.size()-1] = 'e';
 			}
-			else if (re_lessli(in)) {
+			else if (hm_lessli(in)) {
 				in.resize(in.size()-2);
 			}
 			break;
 
 			case 't':
-			if ( re_biliti(in) ) {
+			if ( hm_biliti(in) ) {
 				in.resize(in.size()-5);
 				in += "le";
 			}
-			else if ( re_aliti(in) ) {
+			else if ( hm_aliti(in) ) {
 				in.resize(in.size()-3);
 			}
-			else if (re_iviti(in)) {
+			else if (hm_iviti(in)) {
 				in.resize(in.size()-2);
 				in[in.size()-1] = 'e';
 			}
@@ -247,44 +247,44 @@ string Stemmer::StemWord(string in)
 		break;
 
 		case 'l':
-		if ( re_ational(in) ) {
+		if ( hm_ational(in) ) {
 			in.resize(in.size()-4);
 			in[in.size()-1] = 'e';
 		}
-		else if ( re_tional(in) ) {
+		else if ( hm_tional(in) ) {
 			in.resize(in.size()-2);
 		}
 		break;
 
 		case 'm':
-		if ( re_alism(in) ) {
+		if ( hm_alism(in) ) {
 			in.resize(in.size()-3);
 		}
 		break;
 
 		case 'n':
-		if ( re_ization(in) ) {
+		if ( hm_ization(in) ) {
 			in.resize(in.size()-4);
 			in[in.size()-1] = 'e';
 		}
-		else if ( re_ation(in) ) {
+		else if ( hm_ation(in) ) {
 			in.resize(in.size()-2);
 			in[in.size()-1] = 'e';
 		}
 		break;
 
 		case 'r':
-		if ( re_ator(in) ) {
+		if ( hm_ator(in) ) {
 			in.resize(in.size()-1);
 			in[in.size()-1] = 'e';
 		}
-		else if ( re_izer(in) ) {
+		else if ( hm_izer(in) ) {
 			in.resize(in.size()-1);
 		}
 		break;
 
 		case 's':
-		if ( re_fulness(in) ) {
+		if ( hm_fulness(in) ) {
 			in.resize(in.size()-4);
 		}
 		break;
@@ -306,27 +306,27 @@ string Stemmer::StemWord(string in)
 	    ful:   delete
 	   ness:   delete
 	*/
-// 	if ( re_ational(in) ) {
-// 		in.resize(in.size()-4);
-// 		in[in.size()-1] = 'e';
-// 	}
-// 	else if ( re_tional(in) ) {
-// 		in.resize(in.size()-2);
-// 	}
-// 	else if ( re_alize(in) ) {
-// 		in.resize(in.size()-3);
-// 	}
-// 	else if ( re_icate(in, matches) ) {
-// 		in = matches[1];
-// 	}
-// 	else if ( re_ful_ness(in, matches) ) {
-// 		in = matches[1];
-// 	}
-// 	else if ( re_ative(in) ){
-// 		in.resize(in.size()-5);
-// 	}
-// // cout << setw(5) << left << __LINE__ << in << endl;
-//
+	if ( hm_ational(in) ) {
+		in.resize(in.size()-4);
+		in[in.size()-1] = 'e';
+	}
+	else if ( hm_tional(in) || hm_ical(in) ) {
+		in.resize(in.size()-2);
+	}
+	else if ( hm_alize(in) || hm_icate(in) || hm_ful(in) ) {
+		in.resize(in.size()-3);
+	}
+	else if ( hm_icate(in) ) {
+		in.resize(in.size()-3);
+	}
+	else if ( hm_ness(in) ) {
+		in.resize(in.size()-4);
+	}
+	else if ( hm_ative(in) ){
+		in.resize(in.size()-5);
+	}
+// cout << setw(5) << left << __LINE__ << in << endl;
+
 // 	//	Step 4
 // 	if ( re_ement(in) ) {
 // 		in.resize(in.size()-5);

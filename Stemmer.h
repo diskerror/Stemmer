@@ -78,13 +78,15 @@ protected:
 	static const HasMatch		hm_fulness;
 
 // 	//	step 3
-// 	// static const Hyperscan::Match		re_ational;
-// 	// static const Hyperscan::Match		re_tional;
-// 	static const Hyperscan::Match		re_alize;
-// 	static const Hyperscan::Match		re_icate;
-// 	static const Hyperscan::Match		re_ful_ness;
-// 	static const Hyperscan::Match		re_ative;
-//
+// 	static const HasMatch		hm_ational;
+// 	static const HasMatch		hm_tional;
+	static const HasMatch		hm_alize;
+	static const HasMatch		hm_icate;
+	static const HasMatch		hm_ical;
+	static const HasMatch		hm_ful;
+	static const HasMatch		hm_ness;
+	static const HasMatch		hm_ative;
+
 // 	//	step 4
 // 	static const Hyperscan::Match		re_ement;
 // 	static const Hyperscan::Match		re_ment;
