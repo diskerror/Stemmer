@@ -14,7 +14,6 @@ OBJECTS = \
 	obj/HasMatch.o \
 	obj/GetMatch.o \
 	obj/RemoveMatch.o \
-	obj/ReplaceMatch.o \
 	obj/StemmerConst.o \
 	obj/Stemmer.o \
 	obj/main.o
@@ -46,19 +45,16 @@ obj/GetMatch.o: ../Hyperscan/GetMatch.cp ../Hyperscan/GetMatch.h ../Hyperscan/Hy
 obj/RemoveMatch.o: ../Hyperscan/RemoveMatch.cp ../Hyperscan/RemoveMatch.h ../Hyperscan/Hyperscan.h Makefile
 	$(CPP)
 
-obj/ReplaceMatch.o: ../Hyperscan/ReplaceMatch.cp ../Hyperscan/ReplaceMatch.h ../Hyperscan/RemoveMatch.h ../Hyperscan/Hyperscan.h Makefile
-	$(CPP)
-
 obj/MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h Makefile
 	$(CPP)
 
-obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h ../Hyperscan/RemoveMatch.h ../Hyperscan/ReplaceMatch.h Makefile
+obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h ../Hyperscan/RemoveMatch.h Makefile
 	$(CPP)
 
-obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h ../Hyperscan/RemoveMatch.h ../Hyperscan/ReplaceMatch.h Makefile
+obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h ../Hyperscan/RemoveMatch.h Makefile
 	$(CPP)
 
-obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h  ../Hyperscan/RemoveMatch.h ../Hyperscan/ReplaceMatch.h Makefile
+obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h  ../Hyperscan/RemoveMatch.h Makefile
 	$(CPP)
 
 

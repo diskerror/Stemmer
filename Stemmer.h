@@ -14,7 +14,7 @@ http://snowball.tartarus.org
 #include "Hyperscan/HasMatch.h"
 #include "Hyperscan/GetMatch.h"
 #include "Hyperscan/RemoveMatch.h"
-#include "Hyperscan/ReplaceMatch.h"
+// #include "Hyperscan/ReplaceMatch.h"
 #include <string>
 
 class Stemmer
