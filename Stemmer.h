@@ -21,13 +21,8 @@ class Stemmer
 {
 protected:
 
-	//	Convienence strings for readability. R1 and R2 begin at the end of their regex placeholder.
-	const std::string	s_R1;
-	const std::string	s_R2;
-
 	//	prelude 1
 	//	re_sTrim removes all control characters and spaces from both ends of a word
-	//		and requires a word to have no imbedded control characters.
 	const RemoveMatch	rm_lsTrim;
 	const RemoveMatch	rm_rsTrim;
 

@@ -1,3 +1,4 @@
+
 COMP = g++
 CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/usr/local/include -I/usr/local/include/hs -O2
 CPP	= $(CXX) -include "precompile.hpp" $< -o $@
@@ -19,7 +20,7 @@ OBJECTS = \
 	obj/main.o
 
 
-all: stem Makefile
+all: stem
 
 pre: cleanpre \
 	obj/precompile.o
@@ -59,7 +60,7 @@ obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Hyperscan/HasMatch.h ../
 
 
 clean:
-	${RM} obj stem
+	$(RM) obj stem
 
 cleanpre:
 	$(RM) obj/precompile.o
