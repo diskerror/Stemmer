@@ -17,9 +17,10 @@ void ReplaceMatch::operator()(std::string& input) const
 		throw std::runtime_error((char *) "An error occured during scan.");
 	}
 
-	while(found.size() > 0) {
-		auto cnt = found.back(); found.pop_back();
-		auto pos = found.back(); found.pop_back();
+	uint32_t fs = found.size();
+	while(fs > 0) {
+		auto cnt = found[--fs];
+		auto pos = found[--fs];
 		input.replace(pos, cnt, _replacement);
 	}
 }

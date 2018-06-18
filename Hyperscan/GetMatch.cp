@@ -25,10 +25,8 @@ std::string GetMatch::operator()(const std::string& input) const
 
 int GetMatch::_matchEvent(unsigned int, unsigned long long from, unsigned long long to, unsigned int, void* ctx)
 {
-	std::vector<uint64_t>*	found = (std::vector<uint64_t>*) ctx;
-
 	//	If this has been called then there was a match and stop looking, returning the first match.
-	found->emplace_back(from);		//	position
-	found->emplace_back(to-from);	//	length
+	((std::vector<uint64_t>*)ctx)->emplace_back(from);		//	position
+	((std::vector<uint64_t>*)ctx)->emplace_back(to-from);	//	length
 	return 1;
 }

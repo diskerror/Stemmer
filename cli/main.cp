@@ -20,14 +20,13 @@ int main(int argc, char** argv)
 		for(i=0; i<argc; ++i) {
 			if (args[i] == "-f") {
 				useFile = true;
-				ifstream in(args[i+1]);
+				ifstream in(args[++i]);
 
 				if ( !in )  {
 					throw invalid_argument("file name required or bad file");
 				}
 
-				string fromFile((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
-				text = fromFile;
+				text.assign((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
 			}
 		}
 
@@ -43,14 +42,13 @@ int main(int argc, char** argv)
         tokenizer.SetText(text);
 		string token;
 
-		Stemmer stem;
+		static Stemmer stem;
 
 		while ( (token = tokenizer.Get()) != "" ) {
 			cout << setw(30) << left << token << stem(token) << endl;
 		}
 	}
 	catch (exception& e) {
-		cerr << "my exception" << endl;
 		cerr << e.what() << endl;
 		return EXIT_FAILURE;
 	}

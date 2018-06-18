@@ -23,8 +23,13 @@ inline bool hasEnding(const string& in, const char* end, uint32_t end_len)
 	if(in_size < end_len)
 		return false;
 
-	while (end_len > 0) {
-		if (in[--in_size] != end[--end_len])
+	char* in_char = (char*)in.c_str() + in_size;
+	char* end_char = (char*)end + end_len;
+
+	while (end_char > end) {
+		--in_char;
+		--end_char;
+		if (*in_char != *end_char)
 			return false;
 	}
 

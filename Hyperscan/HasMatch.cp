@@ -6,11 +6,6 @@ HasMatch::HasMatch(const char* expression) :
 {
 }
 
-HasMatch::HasMatch(const std::string& expression) :
-	Hyperscan(expression.c_str(), HS_FLAG_SINGLEMATCH)
-{
-}
-
 bool HasMatch::operator()(const std::string& input) const
 {
 	bool found = false;
@@ -26,9 +21,7 @@ bool HasMatch::operator()(const std::string& input) const
 
 int HasMatch::_matchEvent(unsigned int, unsigned long long, unsigned long long, unsigned int, void* ctx)
 {
-	bool *found = (bool *) ctx;
-
 	//	If this has been called then there was a match and stop looking.
-	*found = true;
+	*(bool *)ctx = true;
 	return 1;
 }

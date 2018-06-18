@@ -17,18 +17,17 @@ void RemoveMatch::operator()(std::string& input) const
 	}
 
 	//	We would return an array of strings if we wanted all matches.
-	while(found.size() > 0) {
-		auto cnt = found.back(); found.pop_back();
-		auto pos = found.back(); found.pop_back();
+	uint32_t fs = found.size();
+	while(fs > 0) {
+		auto cnt = found[--fs];
+		auto pos = found[--fs];
 		input.erase(pos, cnt);
 	}
 }
 
 int RemoveMatch::_matchEvent(unsigned int, unsigned long long from, unsigned long long to, unsigned int, void* ctx)
 {
-	std::vector<uint64_t>*	found = (std::vector<uint64_t>*) ctx;
-
-	found->emplace_back(from);	//	position
-	found->emplace_back(to-from);	//	length
+	((std::vector<uint64_t>*)ctx)->emplace_back(from);		//	position
+	((std::vector<uint64_t>*)ctx)->emplace_back(to-from);	//	length
 	return 0;	//	zero means keep looking
 }

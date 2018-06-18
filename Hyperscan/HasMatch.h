@@ -11,7 +11,6 @@ class HasMatch : public Hyperscan
 
 public:
 	explicit HasMatch(const char*);
-	explicit HasMatch(const std::string&);
 	bool operator()(const std::string&) const;
 };
 
