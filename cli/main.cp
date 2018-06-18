@@ -43,8 +43,10 @@ int main(int argc, char** argv)
         tokenizer.SetText(text);
 		string token;
 
+		Stemmer stem;
+
 		while ( (token = tokenizer.Get()) != "" ) {
-			cout << setw(30) << left << token << Stemmer::StemWord(token) << endl;
+			cout << setw(30) << left << token << stem(token) << endl;
 		}
 	}
 	catch (exception& e) {

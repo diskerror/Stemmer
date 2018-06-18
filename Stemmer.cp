@@ -43,7 +43,7 @@ my @vowels = ( /[aeiou]|(?<![aeiou])y(?![aeiou])/gi );
 */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-string Stemmer::StemWord(string in)
+string Stemmer::operator()(string in)
 {
 	//	remove spaces at beginning and end of string
 	//	Prelude 1
