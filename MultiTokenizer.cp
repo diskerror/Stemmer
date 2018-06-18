@@ -55,16 +55,3 @@ void MultiTokenizer::SetText(string& in)
 {
 	tokens = new stringstream( regex_replace(in, *delimRegex, "\x0A") );
 }
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-string MultiTokenizer::Get()
-{
-	string t;
-	if ( *tokens >> t ) {
-		return t;
-	}
-	else {
-		return "";
-	}
-}

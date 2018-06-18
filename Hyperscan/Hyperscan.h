@@ -17,4 +17,11 @@ public:
 	~Hyperscan();
 };
 
+class found_t {
+public:
+	uint32_t size = 0;		//	count, or number used
+	uint64_t from[8] = {};	//	array of values
+	uint64_t to[8] = {};	//	array of values
+};
+
 #endif    //	DISKERROR_HYPERSCAN_H

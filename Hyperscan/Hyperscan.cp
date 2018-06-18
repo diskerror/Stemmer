@@ -6,7 +6,7 @@ Hyperscan::Hyperscan(const char* expression, uint32_t flags) :
 	_scratch(nullptr),
 	_compile_err(nullptr)
 {
-// 	flags |= HS_FLAG_UTF8 | HS_FLAG_UCP;
+// 	flags |= (HS_FLAG_UTF8 | HS_FLAG_UCP);
 	if (hs_compile(expression, flags, HS_MODE_BLOCK, NULL, &_database, &_compile_err) != HS_SUCCESS) {
 		throw std::runtime_error((char *) _compile_err->message);
 	}

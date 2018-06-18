@@ -8,7 +8,7 @@ RemoveMatch::RemoveMatch(const char* expression) :
 
 void RemoveMatch::operator()(std::string& input) const
 {
-	std::vector<unsigned long long>	found;
+	found_t	found;
 
 	hs_error_t res = hs_scan(_database, input.c_str(), input.size(), 0, _scratch, _matchEvent, &found);
 
@@ -17,17 +17,19 @@ void RemoveMatch::operator()(std::string& input) const
 	}
 
 	//	We would return an array of strings if we wanted all matches.
-	uint32_t fs = found.size();
-	while(fs > 0) {
-		auto cnt = found[--fs];
-		auto pos = found[--fs];
-		input.erase(pos, cnt);
+	while(found.size > 0) {
+		--found.size;
+		input.erase(
+			found.from[found.size],
+			found.to[found.size] - found.from[found.size]
+		);
 	}
 }
 
 int RemoveMatch::_matchEvent(unsigned int, unsigned long long from, unsigned long long to, unsigned int, void* ctx)
 {
-	((std::vector<uint64_t>*)ctx)->emplace_back(from);		//	position
-	((std::vector<uint64_t>*)ctx)->emplace_back(to-from);	//	length
+	((found_t*)ctx)->from[((found_t*)ctx)->size] = from;
+	((found_t*)ctx)->to[((found_t*)ctx)->size] = to;
+	++((found_t*)ctx)->size;
 	return 0;	//	zero means keep looking
 }

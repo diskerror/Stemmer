@@ -10,17 +10,16 @@ int main(int argc, char** argv)
 	try {
 		vector<string> args;
 		int32_t i;
-		for(i=0; i<argc; ++i)
-			args.emplace_back(argv[i]);
-
-
-		//	check for filename parameter
 		string text;
 		bool useFile = false;
+
+		//	check for filename parameter while converting argv to vector-string
 		for(i=0; i<argc; ++i) {
+			args.emplace_back(argv[i]);
 			if (args[i] == "-f") {
 				useFile = true;
-				ifstream in(args[++i]);
+				args.emplace_back(argv[++i]);
+				ifstream in(args[i]);
 
 				if ( !in )  {
 					throw invalid_argument("file name required or bad file");

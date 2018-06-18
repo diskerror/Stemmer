@@ -9,7 +9,7 @@ ReplaceMatch::ReplaceMatch(const char* expression, const char* replace) :
 
 void ReplaceMatch::operator()(std::string& input) const
 {
-	std::vector<uint64_t>	found;
+	found_t	found;
 
 	hs_error_t res = hs_scan(_database, input.c_str(), input.size(), 0, _scratch, _matchEvent, &found);
 
@@ -17,10 +17,12 @@ void ReplaceMatch::operator()(std::string& input) const
 		throw std::runtime_error((char *) "An error occured during scan.");
 	}
 
-	uint32_t fs = found.size();
-	while(fs > 0) {
-		auto cnt = found[--fs];
-		auto pos = found[--fs];
-		input.replace(pos, cnt, _replacement);
+	while(found.size > 0) {
+		--found.size;
+		input.replace(
+			found.from[found.size],
+			found.to[found.size] - found.from[found.size],
+			_replacement
+		);
 	}
 }
