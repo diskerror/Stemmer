@@ -37,7 +37,7 @@ The [Copernica](http://www.copernica.com) [PHP-CPP](http://www.php-cpp.com/) lib
 Just using ```make``` will create a slower debug version.
 
 # Hyperscan
-Until further notice the "hyperscan" branch has been abandonded.
+Until further notice the "hyperscan" branch has been abandoned.
 
 There are many reports of the Hyperscan regular expression engine being upwards of 10 times faster than PCRE but that didn't prove to be the case in this implimentation. It happens that it is 10%-15% slower than the PCRE2 version. Also, the compiler (gcc version 4.9.2) reported that Hyperscan needs to be compiled with the "-fPIC" option in order to be linked to a PHP extension. Customizing someone elses code makes this too much work for an implemention that's already slower than the original design.
 
