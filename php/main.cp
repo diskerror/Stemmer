@@ -9,7 +9,7 @@ enum {
 	DISKERROR_STEM_RETURN_BIGRAM
 };
 
-Php::Value stemmer(Php::Parameters &params)
+Php::Value stem(Php::Parameters &params)
 {
 	static MultiTokenizer tokenizer;
 
@@ -78,7 +78,7 @@ extern "C" {
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_ARRAY", DISKERROR_STEM_RETURN_ARRAY));
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_BIGRAM", DISKERROR_STEM_RETURN_BIGRAM));
 
-		extension.add<stemmer>( "Diskerror\\stem", {
+		extension.add<stem>( "Diskerror\\Stem", {
         	Php::ByVal("subject", Php::Type::String),
         	Php::ByVal("options", Php::Type::Numeric, false)
         } );
