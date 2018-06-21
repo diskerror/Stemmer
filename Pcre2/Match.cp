@@ -9,11 +9,6 @@ Match::Match(const char* expression)
 {
 }
 
-Match::Match(const string& expression)
-	: Pcre2(expression.c_str())
-{
-}
-
 /**
  *  This only returns boolean of match.
  *
@@ -72,8 +67,7 @@ bool Match::operator()(const string& subject, vector<string>& matches) const
 
 	//	Now it must be good. Get the first set of captures.
 	PCRE2_SIZE* ovector = pcre2_get_ovector_pointer(this->_match_data);
-	PCRE2_SIZE i;
-	for (i = 0; i < (PCRE2_SIZE) matchCount; i++) {
+	for (PCRE2_SIZE i = 0; i < (PCRE2_SIZE) matchCount; ++i) {
 		matches.emplace_back( (subjectC + ovector[2*i]), (ovector[2*i+1] - ovector[2*i]) );
 	}
 

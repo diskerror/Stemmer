@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Pcre2.h"
-#include <string>
 
 namespace Pcre2 {
 
@@ -14,10 +13,9 @@ class Substitute : public Pcre2
 
 public:
 		Substitute(const char*, const char*);
-		Substitute(const std::string&, const char*);
-	
+
 	std::string	operator() (const std::string&) const;
-	
+
 };
 
 }

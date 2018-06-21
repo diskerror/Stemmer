@@ -1,6 +1,5 @@
 
 #include "Pcre2.h"
-#include <string.h>
 
 // using namespace Pcre2;
 
@@ -10,11 +9,6 @@ Pcre2::Pcre2::Pcre2(const char* expression)
 	Pcre2::Pcre2::init(expression);
 }
 
-Pcre2::Pcre2::Pcre2(const std::string & expression)
-{
-	Pcre2::Pcre2::init(expression.c_str());
-}
-
 void Pcre2::Pcre2::init(const char* expression)
 {
 	int        errorCode = 0;
@@ -22,7 +16,7 @@ void Pcre2::Pcre2::init(const char* expression)
 
 	_regex = pcre2_compile(
 		(PCRE2_SPTR) expression,
-		strlen((const char*) expression),
+		strlen(expression),
 		PCRE2_UTF | PCRE2_NO_UTF_CHECK,
 		&errorCode,
 		&errorOffset,

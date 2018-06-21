@@ -33,8 +33,15 @@ class MultiTokenizer
 
 	void SetText(std::string&);
 
-	std::string        Get();
+	inline std::string Get();
 
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string MultiTokenizer::Get()
+{
+	std::string t;
+	return ( *tokens >> t ) ? t : "";
+}
 
 #endif    //	DISKERROR_MULTITOKENIZER_H

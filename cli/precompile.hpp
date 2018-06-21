@@ -1,21 +1,18 @@
 
 // #warning NOTE: Precompiled header file being built.
 
-#include <algorithm>
 #include <cstdio>
+#include <cstdlib>
+#include <exception>
 #include <fstream>
-#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
-#include <map>
 #include <regex>
 #include <sstream>
+#include <stdexcept>
 #include <string>
-#include <utility>
-
-#include <ctype.h>
-#include <glob.h>
+#include <vector>
 
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <pcre2.h>

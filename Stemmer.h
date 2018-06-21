@@ -13,90 +13,86 @@ http://snowball.tartarus.org
 
 #include "Pcre2/Substitute.h"
 #include "Pcre2/Match.h"
-#include <string>
 
 class Stemmer
 {
 protected:
 
-	static const std::string s_R1cap;
-	static const std::string s_R1;
-	static const std::string s_R2cap;
-	static const std::string s_R2;
-
-	static const Pcre2::Substitute	re_sTrim;
-
 	//	prelude 1
-	static const Pcre2::Match		re_apos;
-	
-	//	step 0
-	static const Pcre2::Substitute	re_aposS;
-	static const Pcre2::Substitute	re_Sapos;
-	
-	//	over-stem
-	static const Pcre2::Match		re_generVC;
-	
-	//	prelude 2
-	static const Pcre2::Substitute	re_Vy;
-	
-	//	step 1a
-	static const Pcre2::Match		re_sses;
-	static const Pcre2::Match		re_ied_ies;
-	static const Pcre2::Match		re_us_ss;
-	static const Pcre2::Match		re_xVxs;
-	
-	//	step 1b
-	static const Pcre2::Match		re_eed_eedly;
-	static const Pcre2::Match		re_ed_ingly;
-	static const Pcre2::Match		re_at_bl_iz;
-	static const Pcre2::Match		re_dbl_end;
-	static const Pcre2::Match		re_vwxY;
+	//	re_sTrim removes all control characters and spaces from both ends of a word
+	//		and requires a word to have no imbedded control characters.
+	const Pcre2::Substitute	re_sTrim;
+	const Pcre2::Match		re_apos;
 
-	static const Pcre2::Match		re_cvc;
+	//	step 0
+	const Pcre2::Substitute	re_aposS;
+	const Pcre2::Substitute	re_Sapos;
+
+	//	over-stem
+	const Pcre2::Match		re_generVC;
+
+	//	prelude 2
+// 	const Pcre2::Substitute	re_Vy;
+
+	//	step 1a
+	const Pcre2::Match		re_sses;
+	const Pcre2::Match		re_ied_ies;
+	const Pcre2::Match		re_us_ss;
+	const Pcre2::Match		re_xVxs;
+
+	//	step 1b
+	const Pcre2::Match		re_eed_eedly;
+	const Pcre2::Match		re_ed_ingly;
+	const Pcre2::Match		re_at_bl_iz;
+	const Pcre2::Match		re_dbl_end;
+	const Pcre2::Match		re_vwxY;
+
+	const Pcre2::Match		re_cvc;
 
 	//	step 1c
-	static const Pcre2::Match		re_CyY;
+	const Pcre2::Match		re_CyY;
 
 	//	step 2
-	static const Pcre2::Match		re_anci;
-	static const Pcre2::Match		re_logi;
-	static const Pcre2::Match		re_bli;
-	static const Pcre2::Match		re_lessli;
-	static const Pcre2::Match		re_biliti;
-	static const Pcre2::Match		re_aliti;
-	static const Pcre2::Match		re_iviti;
-	static const Pcre2::Match		re_ational;
-	static const Pcre2::Match		re_tional;
-	static const Pcre2::Match		re_alism;
-	static const Pcre2::Match		re_ization;
-	static const Pcre2::Match		re_ation;
-	static const Pcre2::Match		re_ator;
-	static const Pcre2::Match		re_izer;
-	static const Pcre2::Match		re_fulness;
+	const Pcre2::Match		re_anci;
+	const Pcre2::Match		re_logi;
+	const Pcre2::Match		re_bli;
+	const Pcre2::Match		re_lessli;
+	const Pcre2::Match		re_biliti;
+	const Pcre2::Match		re_aliti;
+	const Pcre2::Match		re_iviti;
+	const Pcre2::Match		re_ational;
+	const Pcre2::Match		re_tional;
+	const Pcre2::Match		re_alism;
+	const Pcre2::Match		re_ization;
+	const Pcre2::Match		re_ation;
+	const Pcre2::Match		re_ator;
+	const Pcre2::Match		re_izer;
+	const Pcre2::Match		re_fulness;
 
 	//	step 3
-// 	static const Pcre2::Match		re_ational;	same as step 2
-// 	static const Pcre2::Match		re_tional;
-	static const Pcre2::Match		re_alize;
-	static const Pcre2::Match		re_icate;
-	static const Pcre2::Match		re_ful_ness;
-	static const Pcre2::Match		re_ative;
+// 	const Pcre2::Match		re_ational;	same as step 2
+// 	const Pcre2::Match		re_tional;
+	const Pcre2::Match		re_alize;
+	const Pcre2::Match		re_icate;
+	const Pcre2::Match		re_ful_ness;
+	const Pcre2::Match		re_ative;
 
 	//	step 4
-	static const Pcre2::Match		re_ement;
-	static const Pcre2::Match		re_ment;
-	static const Pcre2::Match		re_ent;
-	static const Pcre2::Match		re_al_er_ic;
-	static const Pcre2::Match		re_R2stion;
-	
+	const Pcre2::Match		re_ement;
+	const Pcre2::Match		re_ment;
+	const Pcre2::Match		re_ent;
+	const Pcre2::Match		re_al_er_ic;
+	const Pcre2::Match		re_R2stion;
+
 	//	step 5
-	static const Pcre2::Match		re_R2e;
-	static const Pcre2::Match		re_R2ll;
+	const Pcre2::Match		re_R2e;
+	const Pcre2::Match		re_R2ll;
 
 public:
-	
-	static std::string StemWord(std::string in);
-	
+
+	explicit Stemmer();
+	std::string operator()(std::string in);
+
 };
 
 #endif	//	DISKERROR_STEMMER_H

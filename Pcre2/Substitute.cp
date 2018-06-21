@@ -4,26 +4,20 @@
 //using namespace Pcre2;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-Pcre2::Substitute::Substitute(const char* expression, const char* replacement)
-	: Pcre2(expression)
+Pcre2::Substitute::Substitute(const char* expression, const char* replacement = "") :
+	Pcre2(expression),
+	_replace(replacement)
 {
-	_replace = replacement;
-}
-
-Pcre2::Substitute::Substitute(const std::string& expression, const char* replacement)
-	: Pcre2(expression.c_str())
-{
-	_replace = replacement;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string Pcre2::Substitute::operator()(const std::string& subject) const
 {
 	uint32_t subjectLen = subject.size();
-	
+
 	PCRE2_SIZE bufferSize = ( subjectLen < 192 ) ? 256 : (subjectLen*1.2);
 	PCRE2_UCHAR outputBuffer[bufferSize];
-	
+
 	auto erro = pcre2_substitute(
 		_regex,
 		(const PCRE2_UCHAR*) subject.c_str(),
@@ -37,9 +31,9 @@ std::string Pcre2::Substitute::operator()(const std::string& subject) const
 		outputBuffer,
 		&bufferSize
 	);
-	
+
 	if ( erro < PCRE2_ERROR_NOMATCH )
 		throw new Exception( erro );
-	
+
 	return std::string((char*) outputBuffer);
 }

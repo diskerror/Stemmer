@@ -5,11 +5,6 @@
 
 #define PCRE2_CODE_UNIT_WIDTH 8
 
-#include <pcre2.h>
-
-#include <string>
-#include <exception>
-
 namespace Pcre2
 {
 
@@ -26,7 +21,6 @@ protected:
 
 public:
 	Pcre2(const char*);
-	Pcre2(const std::string &);
 	virtual ~Pcre2();
 
 	// 	virtual bool	exec(const char*) = 0;	--	OR
