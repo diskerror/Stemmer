@@ -14,4 +14,4 @@
 #include <string>
 #include <vector>
 
-#include <hs.h>
+#include <hs/hs.h>

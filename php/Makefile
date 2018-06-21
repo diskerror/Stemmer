@@ -6,58 +6,60 @@ EXTENSION 		= $(NAME).so
 INI 			= $(NAME).ini
 INI_PATH        = $(shell php --ini | head -1 | sed -r 's/.+: (.+)\/cli/\1/')
 
-COMPILER		= g++
-LINKER			= g++
-COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fPIC -I/usr/local/include
-LINKER_FLAGS	= -shared
+COMP			= g++
+# COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -fPIC -I/usr/local/include
+COMPILER_FLAGS	= -Wall -c -O2 -std=c++11 -Winvalid-pch -fPIC -I/usr/local/include
+CPP	= $(COMP) $(COMPILER_FLAGS) -include precompile.hpp $< -o $@
 
 LDLIBS = \
 	-lphpcpp \
 	-L/usr/local/lib \
 	-Wl,-rpath,/usr/local/lib \
-	-lpcre2-8
-
-CPP	= $(COMPILER) $(COMPILER_FLAGS) -include precompile.hpp $< -o $@
+	-lhs
 
 OBJECTS = \
+	obj/main.o \
 	obj/MultiTokenizer.o \
-	obj/Pcre2.o \
-	obj/Substitute.o \
-	obj/Match.o \
-	obj/StemmerConst.o \
 	obj/Stemmer.o \
-	obj/main.o
+	obj/StemmerConst.o \
+	obj/HasMatch.o \
+	obj/Hyperscan.o \
+	obj/GetMatch.o \
+	obj/RemoveMatch.o
 
 
 all: $(EXTENSION)
 
 $(EXTENSION): obj/precompile.o $(OBJECTS)
-	$(LINKER) $(OBJECTS) $(LINKER_FLAGS) $(LDLIBS) -o $@
+	$(COMP) $(OBJECTS) -shared $(LDLIBS) -o $@
 
 obj/precompile.o: precompile.hpp
 	mkdir -p obj
-	$(COMPILER) $(COMPILER_FLAGS) $< -o $@
+	$(COMP) $(COMPILER_FLAGS) $< -o $@
 
 
-obj/Pcre2.o: ../Pcre2/Pcre2.cp ../Pcre2/Pcre2.h
+obj/Hyperscan.o: ../Hyperscan/Hyperscan.cp ../Hyperscan/Hyperscan.h Makefile
 	$(CPP)
 
-obj/Substitute.o: ../Pcre2/Substitute.cp ../Pcre2/Substitute.h ../Pcre2/Pcre2.h
+obj/HasMatch.o: ../Hyperscan/HasMatch.cp ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h Makefile
 	$(CPP)
 
-obj/Match.o: ../Pcre2/Match.cp ../Pcre2/Match.h ../Pcre2/Pcre2.h
+obj/GetMatch.o: ../Hyperscan/GetMatch.cp ../Hyperscan/GetMatch.h ../Hyperscan/Hyperscan.h Makefile
 	$(CPP)
 
-obj/MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h
+obj/RemoveMatch.o: ../Hyperscan/RemoveMatch.cp ../Hyperscan/RemoveMatch.h ../Hyperscan/Hyperscan.h Makefile
 	$(CPP)
 
-obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h ../Pcre2/Substitute.h ../Pcre2/Pcre2.h ../Pcre2/Match.h
+obj/MultiTokenizer.o: ../MultiTokenizer.cp ../MultiTokenizer.h Makefile
 	$(CPP)
 
-obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h ../Pcre2/Substitute.h ../Pcre2/Pcre2.h ../Pcre2/Match.h
+obj/StemmerConst.o: ../StemmerConst.cp ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h ../Hyperscan/RemoveMatch.h Makefile
 	$(CPP)
 
-obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Pcre2/Substitute.h ../Pcre2/Pcre2.h ../Pcre2/Match.h
+obj/Stemmer.o: ../Stemmer.cp ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h ../Hyperscan/RemoveMatch.h Makefile
+	$(CPP)
+
+obj/main.o: main.cp ../MultiTokenizer.h ../Stemmer.h ../Hyperscan/HasMatch.h ../Hyperscan/Hyperscan.h ../Hyperscan/GetMatch.h  ../Hyperscan/RemoveMatch.h Makefile
 	$(CPP)
 
 

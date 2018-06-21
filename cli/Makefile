@@ -1,6 +1,6 @@
 
 COMP = g++
-CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -I/usr/local/include -I/usr/local/include/hs -O2
+CXX	= $(COMP) -std=c++11 -Wall -Winvalid-pch -c -O2 -I/usr/local/include
 CPP	= $(CXX) -include "precompile.hpp" $< -o $@
 RM	= rm -rf
 

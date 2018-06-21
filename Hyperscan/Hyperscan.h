@@ -3,7 +3,7 @@
 #define DISKERROR_HYPERSCAN_H
 #pragma once
 
-#include <hs.h>
+#include <hs/hs.h>
 
 class Hyperscan
 {
