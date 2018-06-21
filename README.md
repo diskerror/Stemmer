@@ -9,6 +9,9 @@ The makefiles have been tested on Debian 8 with PHP 5.6 and 7.2,  and CentOS 6 w
 ## MultiTokenizer
 This is used with the Stemmer PHP extension. It's a simple text tokenizer that allows for multiple characters to be used as a delimiter.
 
+## CLI
+The CLI version accepts text from the command line (STDIN) or from a file with the "-f" option. All output is directed to the command line (STDOUT).
+
 # Requirements For Compiling
 GCC, Make, and the standard libraries are required to build and install the custom extension, as is the PHP development libraries.
 
