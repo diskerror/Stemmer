@@ -2,8 +2,6 @@
 #include "../MultiTokenizer.h"
 #include "../Stemmer.h"
 
-#include <phpcpp.h>
-
 using namespace std;
 
 enum {
@@ -24,12 +22,13 @@ Php::Value stem(Php::Parameters &params)
 	}
 
 	string outputText, token, thisOne, lastOne;
+	static Stemmer stem;
 	vector<string> outputArray;
 
 	switch (prefs) {
 		case 0:
 			while ((token = tokenizer.Get()) != "") {
-				outputText += Stemmer::StemWord(token) + " ";
+				outputText += stem(token) + " ";
 			}
 
 			if (outputText.size()) {
@@ -40,13 +39,13 @@ Php::Value stem(Php::Parameters &params)
 
 		case DISKERROR_STEM_RETURN_ARRAY:
 			while ((token = tokenizer.Get()) != "") {
-				outputArray.emplace_back(Stemmer::StemWord(token));
+				outputArray.emplace_back(stem(token));
 			}
 			return outputArray;
 
 		case DISKERROR_STEM_RETURN_BIGRAM:
 			while ((token = tokenizer.Get()) != "") {
-				thisOne = Stemmer::StemWord(token);
+				thisOne = stem(token);
 				outputText += (lastOne + thisOne + " ");
 				lastOne = thisOne;
 			}
@@ -55,7 +54,7 @@ Php::Value stem(Php::Parameters &params)
 
 		case DISKERROR_STEM_RETURN_ARRAY | DISKERROR_STEM_RETURN_BIGRAM:
 			while ((token = tokenizer.Get()) != "") {
-				thisOne = Stemmer::StemWord(token);
+				thisOne = stem(token);
 				outputArray.emplace_back(lastOne + thisOne);
 				lastOne = thisOne;
 			}
@@ -69,16 +68,16 @@ Php::Value stem(Php::Parameters &params)
 
 
 extern "C" {
-    
+
     PHPCPP_EXPORT void *get_module()
     {
         // static(!) Php::Extension object that should stay in memory
         // for the entire duration of the process (that's why it's static)
         static Php::Extension extension("diskerror_stem", "0.4");
-        
+
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_ARRAY", DISKERROR_STEM_RETURN_ARRAY));
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_BIGRAM", DISKERROR_STEM_RETURN_BIGRAM));
-        
+
 		extension.add<stem>( "Diskerror\\Stem", {
         	Php::ByVal("subject", Php::Type::String),
         	Php::ByVal("options", Php::Type::Numeric, false)
