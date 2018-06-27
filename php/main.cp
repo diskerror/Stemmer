@@ -78,7 +78,7 @@ extern "C" {
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_ARRAY", DISKERROR_STEM_RETURN_ARRAY));
         extension.add(Php::Constant("DISKERROR_STEM_RETURN_BIGRAM", DISKERROR_STEM_RETURN_BIGRAM));
 
-		extension.add<stem>( "Diskerror\\Stem", {
+		extension.add<stem>( "Diskerror\\stem", {
         	Php::ByVal("subject", Php::Type::String),
         	Php::ByVal("options", Php::Type::Numeric, false)
         } );
